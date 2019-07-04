@@ -8,7 +8,8 @@ It take some principles from the `ECS` pattern but break some of its rules.
 
 - Entity and Components
 - No systems (implementation tied directly to Components)
-- There is an entity tree: each entity can have child entities and one entity is the parent of all.
+- There is an entity tree: each entity can have child entities. That means there is one 'super entity' which own all
+entities from your world.
 
 It is more like the `GameObject` (entity) and `MonoBehaviour` (components) from Unity.
 
