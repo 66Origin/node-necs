@@ -19,7 +19,7 @@ It is more like the `GameObject` (entity) and `MonoBehaviour` (components) from 
 - It does only one small thing
 - As it is not super-evolved, it may not fit your needs.
 - Battle tested
-- Fail-fast principle. Every function call is type and error checked and throw errors to avoid silent errors.
+- Fail-fast. Every function call is type and error checked and throw errors to avoid silent errors.
 
 **A few notes:**
 

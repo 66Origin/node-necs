@@ -5,8 +5,42 @@ const { AComponentSymbol } = require('./internal/symbols');
 class AComponent
 {
     /**
+     * @param {Entity} parentEntity The entity which own this component
+     */
+    constructor(parentEntity)
+    {
+        if (parentEntity.constructor.name !== 'Entity')
+        {
+            throw new TypeError('parentEntity must be an instance of Entity');
+        }
+
+        /**
+         * The entity which own this component
+         * @type {Entity}
+         * @private
+         */
+        this._parentEntity = parentEntity;
+    }
+
+    get parent()
+    {
+        return this._parentEntity;
+    }
+
+    /**
+     * This function will be called on each new frame. You must override it to
+     * specify your own behaviors.
      * @override
-     * @returns {null}
+     */
+    update()
+    {
+
+    }
+
+    /**
+     * On inheriting AComponent, you must override this function to return the component name.
+     * @override
+     * @returns {?String}
      */
     get name()
     {
@@ -14,8 +48,9 @@ class AComponent
     }
 
     /**
+     * On inheriting AComponent, you must override this function to return the component name.
      * @override
-     * @returns {null}
+     * @returns {?String}
      */
     static get name()
     {

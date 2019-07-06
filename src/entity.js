@@ -2,6 +2,7 @@
 const EventEmitter = require('events');
 const isArray = require('lodash/isArray');
 const get = require('lodash/get');
+const toPairs = require('lodash/toPairs');
 
 const AComponent = require('./acomponent');
 const { AComponentSymbol } = require('./internal/symbols')
@@ -92,6 +93,11 @@ class Entity extends EventEmitter
      */
     createChild(name, Components = null)
     {
+        if (typeof name !== 'string')
+        {
+            throw new TypeError('name must be a string');
+        }
+
         if (this._childs[name])
         {
             throw new Error('This child already exist');
@@ -100,6 +106,22 @@ class Entity extends EventEmitter
         const e = new Entity(this, Components);
         this._childs[name] = e;
         return e;
+    }
+
+    /**
+     * Update all components then childs.
+     */
+    update()
+    {
+        this._components.forEach(component =>
+        {
+            component.update();
+        });
+
+        toPairs(this._childs).forEach(child =>
+        {
+            child[1].update();
+        });
     }
 
     /**

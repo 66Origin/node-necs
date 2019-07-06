@@ -1,5 +1,6 @@
 'use strict';
-const Registry = require('./src/registry');
+// const Registry = require('./src/registry');
+const Entity = require('./src/entity');
 const AComponent = require('./src/acomponent');
 
 class PositionComponent extends AComponent
@@ -42,8 +43,6 @@ class PositionComponent extends AComponent
     }
 }
 
-const r = new Registry();
-const e = r.create();
-console.log(r.has(e));
-r.delete(e);
-console.log(r.has(e));
+const rootEntity = Entity.createWorld();
+const child1 = rootEntity.createChild('child1');
+console.log(rootEntity);
