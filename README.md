@@ -35,3 +35,6 @@ It fits cases when you need efficient entity hierarchy for small data set, fast 
 # Quick Start
 
 # Tests
+
+Tests are available in the `test` folder. They are easy to read but boring, take a look you want
+to understand better how it works.

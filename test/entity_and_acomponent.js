@@ -34,12 +34,12 @@ class PositionComponent extends AComponent
         return Object.assign({}, this._position);
     }
 
-    get name()
+    get identity()
     {
-        return PositionComponent.name;
+        return PositionComponent.identity;
     }
 
-    static get name()
+    static get identity()
     {
         return 'position';
     }
@@ -58,12 +58,12 @@ class VelocityComponent extends AComponent
         return this._velocity;
     }
 
-    get name()
+    get identity()
     {
-        return VelocityComponent.name;
+        return VelocityComponent.identity;
     }
 
-    static get name()
+    static get identity()
     {
         return 'velocity';
     }
@@ -71,25 +71,15 @@ class VelocityComponent extends AComponent
 
 class MissingStaticNameComponent extends AComponent
 {
-    get name()
+    get identity()
     {
         return 'MissingStaticNameComponent';
-    }
-
-    static get name()
-    {
-        return null;
     }
 }
 
 class MissingInstanceNameComponent extends AComponent
 {
-    get name()
-    {
-        return null;
-    }
-
-    static get name()
+    static get identity()
     {
         return 'MissingInstanceNameComponent';
     }
@@ -97,6 +87,39 @@ class MissingInstanceNameComponent extends AComponent
 
 describe('Integration between Entity and AComponent', function()
 {
+    describe('Entity.constructor', function()
+    {
+        it('should add components on construction', function()
+        {
+            const e1 = Entity.createWorld([PositionComponent]);
+            expect(e1.has([PositionComponent])).to.be.true;
+
+            const e2 = Entity.createWorld([PositionComponent, VelocityComponent]);
+            expect(e2.has([PositionComponent, VelocityComponent])).to.be.true;
+        });
+
+        it('should throw an error if ComponentsType is not an array', function()
+        {
+            expect(() =>
+            {
+                const e1 = Entity.createWorld(PositionComponent);
+            }).to.throw();
+        });
+
+        it('should throw an error if ComponentsType array doest not contain components', function()
+        {
+            expect(() =>
+            {
+                const e1 = Entity.createWorld([42]);
+            }).to.throw();
+
+            expect(() =>
+            {
+                const e1 = Entity.createWorld([PositionComponent, 42]);
+            }).to.throw();
+        });
+    });
+
     describe('Entity.add', function()
     {
         it('should add the component and it should be readable', function()

@@ -95,6 +95,16 @@ describe('Entity', function()
             expect(child.parent).to.equal(parent);
             expect(parent._childs['child']).to.equal(child);
         });
+
+        it('should throw an error if child already exist', function()
+        {
+            const parent = Entity.createWorld();
+            const child = parent.createChild('child');
+            expect(() =>
+            {
+                parent.createChild('child');
+            }).to.throw();
+        });
     });
 
     describe('#getChild and #_', function()

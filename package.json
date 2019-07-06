@@ -4,7 +4,7 @@
   "description": "Small and Efficient ECS",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "nyc --reporter=html --reporter=text mocha"
   },
   "author": "Yellow Innovation",
   "license": "ISC",
@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1"
   }
 }

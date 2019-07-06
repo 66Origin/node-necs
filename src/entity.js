@@ -29,9 +29,9 @@ class Entity extends EventEmitter
      * @param {?[AComponent]} Components Components to insert to the new entity. These components must be default-constructible.
      * @return {Entity}
      */
-    static createWorld(Components = null)
+    static createWorld(ComponentsType = null)
     {
-        const e = new Entity(null, Components);
+        const e = new Entity(null, ComponentsType);
         return e;
     }
 
@@ -42,7 +42,7 @@ class Entity extends EventEmitter
      * @private
      * @param {?[AComponent]} Components Components to insert to the new entity. These components must be default-constructible.
      */
-    constructor(parent, Components = null)
+    constructor(parent, ComponentsType = null)
     {
         super();
 
@@ -52,7 +52,7 @@ class Entity extends EventEmitter
             throw new TypeError('parent must be an Entity instance or null');
         }
 
-        if (Components !== null && !isArray(Components))
+        if (ComponentsType !== null && !isArray(ComponentsType))
         {
             throw new TypeError('Components must be an Array or null');
         }
@@ -78,9 +78,9 @@ class Entity extends EventEmitter
          */
         this._childs = {};
 
-        if (Components)
+        if (ComponentsType)
         {
-            this.addMany(Components);
+            this.addMany(ComponentsType);
         }
     }
 
@@ -91,7 +91,7 @@ class Entity extends EventEmitter
      * @param {?[AComponent]} Components Components to insert to the new entity. These components must be default-constructible.
      * @return {Entity}
      */
-    createChild(name, Components = null)
+    createChild(name, ComponentsType = null)
     {
         if (typeof name !== 'string')
         {
@@ -103,7 +103,7 @@ class Entity extends EventEmitter
             throw new Error('This child already exist');
         }
 
-        const e = new Entity(this, Components);
+        const e = new Entity(this, ComponentsType);
         this._childs[name] = e;
         return e;
     }
@@ -199,13 +199,13 @@ class Entity extends EventEmitter
         const component = new ComponentType(this, ...args);
         this._assertAComponent(component);
 
-        if (this[component.name])
+        if (this[component.identity])
         {
             throw new Error('Can not add twice same component');
         }
 
         this._components.push(component);
-        this[component.name] = component;
+        this[component.identity] = component;
     }
 
     /**
@@ -239,7 +239,7 @@ class Entity extends EventEmitter
             throw new Error('Can not delete component: not found');
         }
 
-        delete this[ComponentType.name];
+        delete this[ComponentType.identity];
         this._components.splice(componentIndex, 1);
     }
 
@@ -265,7 +265,7 @@ class Entity extends EventEmitter
      */
     _assertAComponentType(ComponentType)
     {
-        if (ComponentType._AComponentSymbol !== AComponentSymbol || !ComponentType.name)
+        if (ComponentType._AComponentSymbol !== AComponentSymbol || !ComponentType.identity)
         {
             throw new TypeError('ComponentType must be a type which inherit AComponent and implement name properties');
         }
@@ -279,7 +279,7 @@ class Entity extends EventEmitter
      */
     _assertAComponent(component)
     {
-        if (!(component instanceof AComponent) || !component.name)
+        if (!(component instanceof AComponent) || !component.identity)
         {
             throw new TypeError('component must inherit AComponent and implement name properties');
         }
@@ -296,7 +296,7 @@ class Entity extends EventEmitter
     {
         return this._components.findIndex(component =>
         {
-            return ComponentType.name === component.name;
+            return ComponentType.identity === component.identity;
         });
     }
 }

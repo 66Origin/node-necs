@@ -72,7 +72,7 @@ class AComponent
      * @override
      * @returns {?String}
      */
-    get name()
+    get identity()
     {
         return null;
     }
@@ -90,7 +90,7 @@ class AComponent
      * @override
      * @returns {?String}
      */
-    static get name()
+    static get identity()
     {
         return null;
     }

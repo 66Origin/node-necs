@@ -7,12 +7,12 @@ const Symbols = require('../src/internal/symbols');
 
 class Comp1 extends AComponent
 {
-    get name()
+    get identity()
     {
         return Comp1.name;
     }
 
-    static get name()
+    static get identity()
     {
         return 'Comp1';
     }
@@ -34,11 +34,11 @@ describe('AComponent', function()
             });
         });
 
-        describe('AComponent.name', function()
+        describe('AComponent.identity', function()
         {
             it('should return null', function()
             {
-                expect(AComponent.name).to.be.null;
+                expect(AComponent.identity).to.be.null;
             });
         });
 
