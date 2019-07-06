@@ -145,11 +145,29 @@ class Entity extends EventEmitter
      */
     getChild(name)
     {
+        if (typeof name !== 'string')
+        {
+            throw new TypeError('name should be a string');
+        }
+
         return get(this._childs, name, null);
     }
 
     /**
-     * Know if components are present on this entity
+     * Get the entity which own this entity.
+     * 
+     * If this entity represent the world, it will return `null`.
+     * 
+     * @return {?Entity} Owner of this entity.
+     */
+    get parent()
+    {
+        return this._parent;
+    }
+
+    /**
+     * Know if components are present on this entity.
+     * If not components are given, it will return `true`.
      * 
      * @param {[AComponent]} ComponentsType Components that may exist on this entity
      * @return {Boolean} `true` if all components are present
@@ -165,7 +183,7 @@ class Entity extends EventEmitter
         {
             this._assertAComponentType(ComponentType);
 
-            return !!this._components[component];
+            return this._findIndex(ComponentType) !== -1;
         });
     }
 
@@ -178,7 +196,7 @@ class Entity extends EventEmitter
     add(ComponentType, ...args)
     {
         this._assertAComponentType(ComponentType);
-        const component = new ComponentType(...args);
+        const component = new ComponentType(this, ...args);
         this._assertAComponent(component);
 
         if (this[component.name])
@@ -194,14 +212,14 @@ class Entity extends EventEmitter
      * Add many components to this entity. Each component must be default-constructible.
      * @param {[AComponent]} Components Type of the components to add
      */
-    addMany(Components)
+    addMany(ComponentsType)
     {
-        if (!isArray(Components))
+        if (!isArray(ComponentsType))
         {
             throw new TypeError('Components must be an Array');
         }
 
-        components.forEach(ComponentType =>
+        ComponentsType.forEach(ComponentType =>
         {
             this.add(ComponentType);
         });
@@ -215,7 +233,7 @@ class Entity extends EventEmitter
     {
         this._assertAComponentType(ComponentType);
 
-        const componentIndex = this._find(ComponentType);
+        const componentIndex = this._findIndex(ComponentType);
         if (componentIndex === -1)
         {
             throw new Error('Can not delete component: not found');
@@ -229,14 +247,14 @@ class Entity extends EventEmitter
      * Delete specific components from this entity
      * @param {[AComponent]} components Type of the components to delete
      */
-    deleteMany(components)
+    deleteMany(ComponentsType)
     {
-        if (!isArray(Components))
+        if (!isArray(ComponentsType))
         {
             throw new TypeError('Components must be an Array');
         }
 
-        components.forEach(this.delete);
+        ComponentsType.forEach(el => this.delete(el));
     }
 
     /**
@@ -249,7 +267,7 @@ class Entity extends EventEmitter
     {
         if (ComponentType._AComponentSymbol !== AComponentSymbol || !ComponentType.name)
         {
-            throw new TypeError('ComponentType must be a type which inherit AComponent');
+            throw new TypeError('ComponentType must be a type which inherit AComponent and implement name properties');
         }
     }
 
@@ -263,7 +281,7 @@ class Entity extends EventEmitter
     {
         if (!(component instanceof AComponent) || !component.name)
         {
-            throw new TypeError('component must inherit AComponent');
+            throw new TypeError('component must inherit AComponent and implement name properties');
         }
     }
 

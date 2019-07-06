@@ -2,13 +2,40 @@
 
 const { AComponentSymbol } = require('./internal/symbols');
 
+/**
+ * `AComponent` represent data or behaviors on an `Entity`. As an example, it can
+ * represent a position (x,y), a hitbox or a texture.
+ * 
+ * The `A` in `AComponent` is for Abstract, it means you can not construct but you
+ * must inherit it. A non-inherited `AComponent` represent nothing.
+ * 
+ * So on, you must inherit it, specify your datas and/or behaviour. You can
+ * set your behaviors in the `update()` function or in public functions. You can
+ * access the parent entity, you can access others components.
+ * 
+ * If your component require others components, you must check their presence
+ * in the constructor and throw if they are missing. Remember, if you want to
+ * follow this project design, you must fail-fast. It means you check every error-case
+ * and throw as soon as possible. Better see sooner than undefined behaviors in production.
+ * 
+ * The `update()` function automatically called when your entity tree got its function
+ * `update()` called.
+ */
 class AComponent
 {
     /**
+     * On inheritting `AComponent`, `parentEntity` will be passed to your constructor among
+     * your own arguments. You must keep `parentEntity` first, then your arguments.
+     *
      * @param {Entity} parentEntity The entity which own this component
      */
     constructor(parentEntity)
     {
+        if (new.target === AComponent)
+        {
+            throw new Error('AComponent can not be instantiated. You must inherit it.');
+        }
+
         if (parentEntity.constructor.name !== 'Entity')
         {
             throw new TypeError('parentEntity must be an instance of Entity');
@@ -38,7 +65,10 @@ class AComponent
     }
 
     /**
-     * On inheriting AComponent, you must override this function to return the component name.
+     * On inheriting AComponent, you must override this function to return the
+     * component name from your class static function name. See below for
+     * more informations.
+     * 
      * @override
      * @returns {?String}
      */
@@ -49,6 +79,14 @@ class AComponent
 
     /**
      * On inheriting AComponent, you must override this function to return the component name.
+     * 
+     * The component name will be the easy-access key on your entity. If you set
+     * `position`, you will be able to access the component using `entity.position`.
+     * 
+     * It should be unique.
+     * 
+     * See above for the instance version of this function.
+     *
      * @override
      * @returns {?String}
      */
