@@ -1,0 +1,13 @@
+{
+  "name": "necs-game-of-life",
+  "version": "1.0.0",
+  "description": "Game of life NECS example",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Yellow Innovation",
+  "license": "LGPL-3.0-only",
+  "dependencies": {
+    "terminal-canvas": "^2.1.0"
+  },
+  "devDependencies": {}
+}

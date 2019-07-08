@@ -1,5 +1,5 @@
 {
-  "name": "yecs",
+  "name": "necs",
   "version": "1.0.0",
   "description": "Small and Efficient ECS",
   "main": "index.js",

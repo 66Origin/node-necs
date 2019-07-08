@@ -141,4 +141,61 @@ describe('Entity', function()
             }).to.throw();
         });
     });
+
+    describe('#deleteChild', function()
+    {
+        it('should delete the child', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+            const b = parent.createChild('b');
+
+            parent.deleteChild('a');
+            expect(parent.getChild('a')).to.be.null;
+            expect(parent.getChild('b')).to.equal(b);
+        });
+
+        it('should throw on deleting unknown child', function()
+        {
+            const parent = Entity.createWorld();
+
+            expect(() =>
+            {
+                parent.deleteChild('42');
+            }).to.throw();
+        });
+
+        it('should throw on passing something else than a string', function()
+        {
+            const parent = Entity.createWorld();
+
+            expect(() =>
+            {
+                parent.deleteChild(42);
+            }).to.throw();
+        });
+    });
+
+    describe('#deleteThis', function()
+    {
+        it('should delete the child', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+            expect(parent.getChild('a')).to.be.equal(a);
+
+            a.deleteThis();
+            expect(parent.getChild('a')).to.be.null;
+        });
+
+        it('should throw on deleting a world', function()
+        {
+            const parent = Entity.createWorld();
+
+            expect(() =>
+            {
+                parent.deleteThis();
+            }).to.throw();
+        });
+    });
 });

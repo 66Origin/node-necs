@@ -1,3 +1,4 @@
 return {
-    AComponent: Symbol()
+    AComponent: Symbol(),
+    ASystem: Symbol()
 };

@@ -27,18 +27,18 @@ class AComponent
      * On inheritting `AComponent`, `parentEntity` will be passed to your constructor among
      * your own arguments. You must keep `parentEntity` first, then your arguments.
      *
-     * @param {Entity} parentEntity The entity which own this component
+     * @param {Entity} parent The entity which own this component
      */
-    constructor(parentEntity)
+    constructor(parent)
     {
         if (new.target === AComponent)
         {
             throw new Error('AComponent can not be instantiated. You must inherit it.');
         }
 
-        if (parentEntity.constructor.name !== 'Entity')
+        if (parent.constructor.name !== 'Entity')
         {
-            throw new TypeError('parentEntity must be an instance of Entity');
+            throw new TypeError('parent must be an instance of Entity');
         }
 
         /**
@@ -46,12 +46,23 @@ class AComponent
          * @type {Entity}
          * @private
          */
-        this._parentEntity = parentEntity;
+        this._parent = parent;
+    }
+
+    /**
+     * This function will be called on destruction.
+     * 
+     * You can do some cleanup if needed.
+     * @override
+     */
+    destructor()
+    {
+
     }
 
     get parent()
     {
-        return this._parentEntity;
+        return this._parent;
     }
 
     /**

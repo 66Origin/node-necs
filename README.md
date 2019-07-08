@@ -6,8 +6,9 @@ It take some principles from the `ECS` pattern but break some of its rules.
 
 **In short:**
 
-- Entity and Components
-- No systems (implementation tied directly to Components)
+- Entity, Components and Systems.
+- Components are not pure data, they have 'code' and can replace systems in some cases.
+- On calling `update()` to an entity, all its childs and component will have `update()` called too.
 - There is an entity tree: each entity can have child entities. That means there is one 'super entity' which own all
 entities from your world.
 
@@ -18,7 +19,7 @@ It is more like the `GameObject` (entity) and `MonoBehaviour` (components) from 
 - Small and easy to read/edit
 - It does only one small thing
 - As it is not super-evolved, it may not fit your needs.
-- Battle tested
+- Battle tested by tests and production use.
 - Fail-fast. Every function call is type and error checked and throw errors to avoid silent errors.
 
 **A few notes:**

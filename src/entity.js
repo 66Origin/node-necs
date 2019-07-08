@@ -5,6 +5,7 @@ const get = require('lodash/get');
 const toPairs = require('lodash/toPairs');
 
 const AComponent = require('./acomponent');
+const ASystem = require('./asystem');
 const { AComponentSymbol } = require('./internal/symbols')
 
 /**
@@ -58,6 +59,14 @@ class Entity extends EventEmitter
         }
 
         /**
+         * Component name from parent entity. If this entity is a world,
+         * it will remain null. This if for identifying entity from parent.
+         * @type {?String}
+         * @private
+         */
+        this._name = null;
+
+        /**
          * All components attached to this entity.
          * @type {[AComponent]}
          * @private
@@ -85,10 +94,23 @@ class Entity extends EventEmitter
     }
 
     /**
+     * This function is automatically called on destruction. It will call
+     * `destructor()` on every components. Do not use an entity after this
+     * function being called.
+     */
+    _destructor()
+    {
+        this._components.forEach(component =>
+        {
+            component.destructor();
+        });
+    }
+
+    /**
      * Create an entity which will be child of this entity.
      * 
      * @param {String} name Name of the child. You can later get the child using `_()` or `getChild()` functions.
-     * @param {?[AComponent]} Components Components to insert to the new entity. These components must be default-constructible.
+     * @param {?[AComponent]} ComponentsType Components to insert to the new entity. These components must be default-constructible.
      * @return {Entity}
      */
     createChild(name, ComponentsType = null)
@@ -104,23 +126,24 @@ class Entity extends EventEmitter
         }
 
         const e = new Entity(this, ComponentsType);
+        e._name = name;
         this._childs[name] = e;
         return e;
     }
 
     /**
-     * Update all components then childs.
+     * Update all childs then our own components.
      */
     update()
     {
-        this._components.forEach(component =>
-        {
-            component.update();
-        });
-
         toPairs(this._childs).forEach(child =>
         {
             child[1].update();
+        });
+
+        this._components.forEach(component =>
+        {
+            component.update();
         });
     }
 
@@ -154,6 +177,40 @@ class Entity extends EventEmitter
     }
 
     /**
+     * Delete a child. An error will be thrown if child is not found.
+     * 
+     * @param {String} name Child name you want to get
+     */
+    deleteChild(name)
+    {
+        if (typeof name !== 'string')
+        {
+            throw new TypeError('name should be a string');
+        }
+
+        if (!this._childs[name])
+        {
+            throw new Error('can not delete child: not found');
+        }
+        this._childs[name]._destructor();
+        delete this._childs[name];
+    }
+
+    /**
+     * Delete this entity. It must be a child of another entity, else an error will
+     * be thrown.
+     */
+    deleteThis()
+    {
+        if (!this._name)
+        {
+            throw new Error('This entity have no parent. You can not delete it.');
+        }
+
+        this.parent.deleteChild(this._name);
+    }
+
+    /**
      * Get the entity which own this entity.
      * 
      * If this entity represent the world, it will return `null`.
@@ -183,7 +240,7 @@ class Entity extends EventEmitter
         {
             this._assertAComponentType(ComponentType);
 
-            return this._findIndex(ComponentType) !== -1;
+            return this._findComponentIndex(ComponentType) !== -1;
         });
     }
 
@@ -226,25 +283,29 @@ class Entity extends EventEmitter
     }
 
     /**
-     * Delete a specific component from this entity
+     * Delete a specific component from this entity. If the Component is not
+     * found, an error will be thrown.
+     * 
      * @param {AComponent} ComponentType Type of the component to delete
      */
     delete(ComponentType)
     {
         this._assertAComponentType(ComponentType);
 
-        const componentIndex = this._findIndex(ComponentType);
+        const componentIndex = this._findComponentIndex(ComponentType);
         if (componentIndex === -1)
         {
             throw new Error('Can not delete component: not found');
         }
 
+        this._components[componentIndex].destructor();
         delete this[ComponentType.identity];
         this._components.splice(componentIndex, 1);
     }
 
     /**
-     * Delete specific components from this entity
+     * Delete specific components from this entity. If a component is not found,
+     * an error will be thrown.
      * @param {[AComponent]} components Type of the components to delete
      */
     deleteMany(ComponentsType)
@@ -283,6 +344,11 @@ class Entity extends EventEmitter
         {
             throw new TypeError('component must inherit AComponent and implement name properties');
         }
+
+        if (component.identity !== component.constructor.identity)
+        {
+            throw new Error('identity and Class.identity do not return the same value');
+        }
     }
 
     /**
@@ -292,7 +358,7 @@ class Entity extends EventEmitter
      * @param {AComponent} ComponentType The component to find on this entity
      * @return {Number} The index of the component or `-1` if not found.
      */
-    _findIndex(ComponentType)
+    _findComponentIndex(ComponentType)
     {
         return this._components.findIndex(component =>
         {

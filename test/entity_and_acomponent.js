@@ -85,6 +85,19 @@ class MissingInstanceNameComponent extends AComponent
     }
 }
 
+class IdentitiesDoesNotReturnSameThingComponent extends AComponent
+{
+    static get identity()
+    {
+        return 'a';
+    }
+
+    get identity()
+    {
+        return 'b';
+    }
+}
+
 describe('Integration between Entity and AComponent', function()
 {
     describe('Entity.constructor', function()
@@ -155,6 +168,15 @@ describe('Integration between Entity and AComponent', function()
                 e.add(MissingInstanceNameComponent);
             }).to.throw();
         });
+
+        it('should throw if identities properties does not return the same value', function()
+        {
+            const e = Entity.createWorld();
+            expect(() =>
+            {
+                e.add(IdentitiesDoesNotReturnSameThingComponent);
+            }).to.throw();
+        })
 
         it('should throw if adding the same component twice', function()
         {
@@ -398,6 +420,76 @@ describe('Integration between Entity and AComponent', function()
             {
                 e.deleteMany([42]);
             }).to.throw();
+        });
+    });
+
+    describe('#destructor', function()
+    {
+        it('should be called on destructing entity with components', function()
+        {
+            let isDestructorCalled = false;
+
+            class DestrusctorComponent extends AComponent
+            {
+                destructor()
+                {
+                    isDestructorCalled = true;
+                }
+
+                get identity()
+                {
+                    return DestrusctorComponent.identity;
+                }
+
+                static get identity()
+                {
+                    return 'destructor';
+                }
+            };
+
+            const e = Entity.createWorld();
+            const child = e.createChild('child', [DestrusctorComponent]);
+            child.deleteThis();
+
+            expect(isDestructorCalled).to.be.true;
+        });
+    });
+
+    describe('#update', function()
+    {
+        it('should call update on every childs and component', function()
+        {
+            let updateCount = 0;
+
+            class UpdateComponent extends AComponent
+            {
+                update()
+                {
+                    ++updateCount;
+                }
+
+                get identity()
+                {
+                    return UpdateComponent.identity;
+                }
+
+                static get identity()
+                {
+                    return 'updater';
+                }
+            };
+
+            const e = Entity.createWorld();
+            const child1 = e.createChild('1', [UpdateComponent]);
+            const child2 = e.createChild('2', [UpdateComponent]);
+
+            expect(updateCount).to.equal(0);
+
+            e.update();
+            expect(updateCount).to.equal(2);
+
+            child1.update();
+            expect(updateCount).to.equal(3);
         });
     });
 });
