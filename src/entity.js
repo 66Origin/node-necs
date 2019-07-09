@@ -132,7 +132,8 @@ class Entity extends EventEmitter
     }
 
     /**
-     * Update all childs then our own components.
+     * Update all childs then our own components. This will call `update()` on
+     * all child entities and on all components from this entity and childs.
      */
     update()
     {

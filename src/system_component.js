@@ -7,6 +7,8 @@ const AComponent = require('./acomponent');
 /**
  * `SystemComponent` allow you to add systems to an entity. We recommand to add it
  * only to root entities to keep simple and predictable behaviours.
+ * 
+ * System are always executed in the order they are added: first added, first executed.
  */
 class SystemComponent extends AComponent
 {
@@ -24,6 +26,8 @@ class SystemComponent extends AComponent
 
     /**
      * Add a system.
+     * 
+     * System are always executed in the order they are added: first added, first executed.
      * 
      * See ASystem documentation for more informations. 
      * 
