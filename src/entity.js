@@ -6,7 +6,7 @@ const toPairs = require('lodash/toPairs');
 
 const AComponent = require('./acomponent');
 const ASystem = require('./asystem');
-const { AComponentSymbol } = require('./internal/symbols')
+const { AComponentSymbol } = require('./internal/symbols');
 
 /**
  * An entity represent 'a thing' into your world.
@@ -27,7 +27,7 @@ class Entity extends EventEmitter
      * Create an entity which have no parent: it will represent a world. It will
      * be the 'root', and will have many childs.
      * 
-     * @param {?[AComponent]} Components Components to insert to the new entity. These components must be default-constructible.
+     * @param {?[AComponent]} ComponentsType Components to insert to the new entity. These components must be default-constructible.
      * @return {Entity}
      */
     static createWorld(ComponentsType = null)
@@ -41,7 +41,8 @@ class Entity extends EventEmitter
      * You must NOT use this function: use `static createWorld()` or `createChild()`.
      * 
      * @private
-     * @param {?[AComponent]} Components Components to insert to the new entity. These components must be default-constructible.
+     * @param {?Entity} parent The parent of this new entity. `null` mean it is a 'world' entity
+     * @param {?[AComponent]} ComponentsType Components to insert to the new entity. These components must be default-constructible.
      */
     constructor(parent, ComponentsType = null)
     {
@@ -268,7 +269,7 @@ class Entity extends EventEmitter
 
     /**
      * Add many components to this entity. Each component must be default-constructible.
-     * @param {[AComponent]} Components Type of the components to add
+     * @param {[AComponent]} ComponentsType Type of the components to add
      */
     addMany(ComponentsType)
     {
@@ -307,7 +308,7 @@ class Entity extends EventEmitter
     /**
      * Delete specific components from this entity. If a component is not found,
      * an error will be thrown.
-     * @param {[AComponent]} components Type of the components to delete
+     * @param {[AComponent]} ComponentsType Type of the components to delete
      */
     deleteMany(ComponentsType)
     {

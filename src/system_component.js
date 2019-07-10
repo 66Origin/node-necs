@@ -32,7 +32,7 @@ class SystemComponent extends AComponent
      * See ASystem documentation for more informations. 
      * 
      * @param {ASystem} SystemType System to add.
-     * @param {*} ...args Arguments to pass to system constructor
+     * @param {*} args Arguments to pass to system constructor
      */
     add(SystemType, ...args)
     {

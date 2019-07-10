@@ -410,7 +410,7 @@ describe('Integration between Entity and AComponent', function()
             expect(() =>
             {
                 e.deleteMany(42);
-            }).to.throw();;
+            }).to.throw();
         });
 
         it('should throw on passing non-components in array', function()
@@ -429,7 +429,7 @@ describe('Integration between Entity and AComponent', function()
         {
             let isDestructorCalled = false;
 
-            class DestrusctorComponent extends AComponent
+            class DestructorComponent extends AComponent
             {
                 destructor()
                 {
@@ -438,17 +438,17 @@ describe('Integration between Entity and AComponent', function()
 
                 get identity()
                 {
-                    return DestrusctorComponent.identity;
+                    return DestructorComponent.identity;
                 }
 
                 static get identity()
                 {
                     return 'destructor';
                 }
-            };
+            }
 
             const e = Entity.createWorld();
-            const child = e.createChild('child', [DestrusctorComponent]);
+            const child = e.createChild('child', [DestructorComponent]);
             child.deleteThis();
 
             expect(isDestructorCalled).to.be.true;
