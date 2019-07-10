@@ -225,6 +225,16 @@ class Entity extends EventEmitter
     }
 
     /**
+     * Get the name of this entity. All entities have a name excepted root entities wich have no parent as a world.
+     *
+     * @returns {?String} Name of this entity
+     */
+    get name()
+    {
+        return this._name;
+    }
+
+    /**
      * Know if components are present on this entity.
      * If not components are given, it will return `true`.
      * 

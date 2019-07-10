@@ -16,11 +16,12 @@ It is more like the `GameObject` (entity) and `MonoBehaviour` (components) from 
 
 **Core design principles:**
 
-- Small and easy to read/edit
-- It does only one small thing
-- As it is not super-evolved, it may not fit your needs.
-- Battle tested by tests and production use.
-- Fail-fast. Every function call is type and error checked and throw errors to avoid silent errors.
+- Small and easy to read/edit.
+- It does only one small thing.
+- As it is not super-evolved, it may not fit your needs. It will not be efficient for medium to big datasets because
+many loops could be optimized at the price of complexity.
+- Battle tested and production tested.
+- Fail-fast. Every function call is type and error checked and throw errors: no silent error that will blow somewhere sometime.
 
 **A few notes:**
 
@@ -28,12 +29,12 @@ It is more like the `GameObject` (entity) and `MonoBehaviour` (components) from 
 
 # Use cases
 
-It may not be as fast as you would need as there is no reactive system and lots of iterations over array: it does not
-fit having lots of entities.
-
 It fits cases when you need efficient entity hierarchy for small data set, fast prototyping and easy to maintain production code.
 
 # Quick Start
+
+- [Super simple example](examples/simple/index.js)
+- [Game of life reimplemented](examples/game_of_life/index.js)
 
 # Tests
 
