@@ -69,6 +69,89 @@ class VelocityComponent extends AComponent
     }
 }
 
+// We can also inherit component by themselves, they can be abstract too if needed
+class PositionComponent2 extends AComponent
+{
+    constructor(parent, position = null)
+    {
+        super(parent);
+
+        this._position = {x: 0, y: 0};
+
+        console.log(typeof position);
+        if (position && typeof position === 'object' &&
+            typeof position.x === 'number' && typeof position.y === 'number')
+        {
+            this._position = Object.assign({}, position);
+        }
+    }
+
+    get position()
+    {
+        return this._position;
+    }
+
+    get identity()
+    {
+        return PositionComponent.identity;
+    }
+
+    static get identity()
+    {
+        return 'position';
+    }
+}
+
+class DrawableComponent extends PositionComponent2
+{
+    constructor(parentEntity, texture = null)
+    {
+        super(parentEntity);
+
+        if (new.target === DrawableComponent)
+        {
+            throw new Error('Can not instantiate DrawableComponent. You must inherit it.');
+        }
+
+        this._texture = texture;
+    }
+
+    /**
+     * @private
+     */
+    get texture()
+    {
+        return this._texture;
+    }
+
+    /**
+     * @private
+     */
+    set texture(t)
+    {
+        this._texture = t;
+    }
+}
+
+class SpriteComponent extends DrawableComponent
+{
+    constructor(parent, texture = null)
+    {
+        super(parent, texture);
+        this.iAmASprite = true;
+    }
+
+    get identity()
+    {
+        return SpriteComponent.identity;
+    }
+
+    static get identity()
+    {
+        return 'sprite';
+    }
+}
+
 class MissingStaticNameComponent extends AComponent
 {
     get identity()
@@ -300,6 +383,19 @@ describe('Integration between Entity and AComponent', function()
             e.add(PositionComponent);
             expect(e.has([PositionComponent, VelocityComponent])).to.be.false;
             expect(e.has([VelocityComponent, PositionComponent])).to.be.false;
+        });
+
+        it('should return true if entity have a child class of the given class', function()
+        {
+            const e = Entity.createWorld();
+            const child = e.createChild('child');
+            child.add(SpriteComponent);
+            expect(child.has([SpriteComponent])).to.be.true;
+            expect(child.has([DrawableComponent])).to.be.true;
+            expect(child.has([PositionComponent2])).to.be.true;
+            expect(child.has([PositionComponent2, DrawableComponent, SpriteComponent])).to.be.true;
+            expect(child.has([VelocityComponent, PositionComponent2, DrawableComponent, SpriteComponent])).to.be.false;
+            expect(child.has([VelocityComponent])).to.be.false;
         });
     });
 

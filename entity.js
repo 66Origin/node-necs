@@ -237,6 +237,10 @@ class Entity extends EventEmitter
     /**
      * Know if components are present on this entity.
      * If not components are given, it will return `true`.
+     *
+     * This function will also return `true` if you give a super class of an installed component.
+     * You can by example have `ADrawableComponent` which is abstract and many implementations: `SpriteComponent`,
+     * `TextComponent`, ...
      * 
      * @param {[AComponent]} ComponentsType Components that may exist on this entity
      * @return {Boolean} `true` if all components are present
@@ -252,7 +256,7 @@ class Entity extends EventEmitter
         {
             this._assertAComponentType(ComponentType);
 
-            return this._findComponentIndex(ComponentType) !== -1;
+            return this._hasComponent(ComponentType);
         });
     }
 
@@ -375,6 +379,24 @@ class Entity extends EventEmitter
         return this._components.findIndex(component =>
         {
             return ComponentType.identity === component.identity;
+        });
+    }
+
+    /**
+     * Know if any of the entity' components is or inherit from `ComponentType`.
+     *
+     * This function differ from `_findComponentIndex`:
+     * - this function check for any compatible component including inheritance
+     * - `_findComponentIndex` find the exact instance match
+     *
+     * @param {AComponent} ComponentType The component to find on this entity
+     * @return {Boolean} `true` if found
+     */
+    _hasComponent(ComponentType)
+    {
+        return this._components.some(component =>
+        {
+            return component instanceof ComponentType;
         });
     }
 }
