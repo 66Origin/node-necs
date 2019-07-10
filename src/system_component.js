@@ -5,10 +5,12 @@ const { ASystemSymbol } = require('./internal/symbols')
 const AComponent = require('./acomponent');
 
 /**
- * `SystemComponent` allow you to add systems to an entity. We recommand to add it
+ * `SystemComponent` allow you to add systems to an entity. We recommend to add it
  * only to root entities to keep simple and predictable behaviours.
  * 
  * System are always executed in the order they are added: first added, first executed.
+ *
+ * To create your own system, take a look a the file `asystem.js`.
  */
 class SystemComponent extends AComponent
 {
@@ -57,6 +59,9 @@ class SystemComponent extends AComponent
         this._systems.splice(systemIndex, 1);
     }
 
+    /**
+     * Call the `update()` function on all registered systems with the complying entities.
+     */
     update()
     {
         // Get all entities which comply to required components.

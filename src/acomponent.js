@@ -112,6 +112,7 @@ class AComponent
      * You will often pass your inherited class directly as a class - not as an instance.
      * This static field return a well-known symbol which will be equality checked to ensure
      * inheritance.
+     * @private
      */
     static get _AComponentSymbol()
     {
