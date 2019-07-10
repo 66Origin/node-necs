@@ -1,10 +1,10 @@
 'use strict';
 const expect = require('chai').expect;
 
-const Entity = require('../src/entity');
-const AComponent = require('../src/acomponent');
-const ASystem = require('../src/asystem');
-const SystemComponent = require('../src/system_component');
+const Entity = require('../entity');
+const AComponent = require('../acomponent');
+const ASystem = require('../asystem');
+const SystemComponent = require('../system_component');
 
 class ExampleSystem extends ASystem
 {

@@ -7,10 +7,10 @@
  */
 
 const TerminalCanvas = require('terminal-canvas');
-const Entity = require('../../src/entity');
-const AComponent = require('../../src/acomponent');
-const ASystem = require('../../src/asystem');
-const SystemComponent = require('../../src/system_component');
+const Entity = require('../../entity');
+const AComponent = require('../../acomponent');
+const ASystem = require('../../asystem');
+const SystemComponent = require('../../system_component');
 
 const uniqWith = require('lodash/uniqWith');
 const isEqual = require('lodash/isEqual');

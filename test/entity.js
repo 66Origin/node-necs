@@ -1,7 +1,7 @@
 'use strict';
 const expect = require('chai').expect;
 
-const Entity = require('../src/entity');
+const Entity = require('../entity');
 
 describe('Entity', function()
 {

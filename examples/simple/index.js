@@ -1,7 +1,7 @@
-const Entity = require('../../src/entity');
-const AComponent = require('../../src/acomponent');
-const SystemComponent = require('../../src/system_component');
-const ASystem = require('../../src/asystem');
+const Entity = require('../../entity');
+const AComponent = require('../../acomponent');
+const SystemComponent = require('../../system_component');
+const ASystem = require('../../asystem');
 
 // Simple component which only hold `payload`.
 class DataComponent extends AComponent

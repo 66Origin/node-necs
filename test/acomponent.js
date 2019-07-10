@@ -1,9 +1,9 @@
 'use strict';
 const expect = require('chai').expect;
 
-const Entity = require('../src/entity');
-const AComponent = require('../src/acomponent');
-const Symbols = require('../src/internal/symbols');
+const Entity = require('../entity');
+const AComponent = require('../acomponent');
+const Symbols = require('../internal/symbols');
 
 class Comp1 extends AComponent
 {

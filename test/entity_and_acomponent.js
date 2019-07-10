@@ -1,8 +1,8 @@
 'use strict';
 const expect = require('chai').expect;
 
-const Entity = require('../src/entity');
-const AComponent = require('../src/acomponent');
+const Entity = require('../entity');
+const AComponent = require('../acomponent');
 
 class PositionComponent extends AComponent
 {
