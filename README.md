@@ -7,12 +7,12 @@ It take some principles from the `ECS` pattern but break some of its rules.
 **In short:**
 
 - Entity, Components and Systems.
-- Components are not pure data, they have 'code' and can replace systems in some cases.
+- Components are not pure data, they can have 'code' and can replace systems in some cases.
 - On calling `update()` to an entity, all its childs and component will have `update()` called too.
 - There is an entity tree: each entity can have child entities. That means there is one 'super entity' which own all
 entities from your world.
 
-It is more like the `GameObject` (entity) and `MonoBehaviour` (components) from Unity.
+It is like the `GameObject` (entity) and `MonoBehaviour` (components) from Unity.
 
 **Core design principles:**
 
@@ -35,6 +35,10 @@ It fits cases when you need efficient entity hierarchy for small data set, fast 
 
 - [Super simple example](examples/simple/index.js)
 - [Game of life reimplemented](examples/game_of_life/index.js)
+
+# Documentation
+
+Everything is documented in the code. It is small enough so you can read the documentation there.
 
 # Tests
 
