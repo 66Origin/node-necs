@@ -45,7 +45,7 @@ Everything is documented in the code. It is small enough so you can read the doc
 Tests are available in the `test` folder. They are easy to read but boring, take a look if you want
 to understand better how it works.
 
-## License
+# License
 
 This work is dual-licensed under Apache 2.0 and GPL 2.0 (or any later version).
 You can choose between one of them if you use this work.
