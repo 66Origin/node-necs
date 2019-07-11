@@ -78,7 +78,6 @@ class PositionComponent2 extends AComponent
 
         this._position = {x: 0, y: 0};
 
-        console.log(typeof position);
         if (position && typeof position === 'object' &&
             typeof position.x === 'number' && typeof position.y === 'number')
         {
