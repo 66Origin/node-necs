@@ -26,6 +26,8 @@ many loops could be optimized at the price of complexity.
 **A few notes:**
 
 - We use `lodash` but do require only the functions we need and we do not use chains. It drastically lower the memory footprint.
+- Sub-classing components is supported, but you must not insert many components sharing a common super class (excepted for AComponent).
+This limitation is not strictly checked in code due to limitations from Javascript. Making components as mixins may fix the limitation.
 
 # Use cases
 
@@ -39,6 +41,8 @@ It fits cases when you need efficient entity hierarchy for small data set, fast 
 # Documentation
 
 Everything is documented in the code. It is small enough so you can read the documentation there.
+
+In depth doc coming later.
 
 # Tests
 

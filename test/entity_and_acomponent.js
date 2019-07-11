@@ -259,7 +259,7 @@ describe('Integration between Entity and AComponent', function()
             {
                 e.add(IdentitiesDoesNotReturnSameThingComponent);
             }).to.throw();
-        })
+        });
 
         it('should throw if adding the same component twice', function()
         {
@@ -268,6 +268,16 @@ describe('Integration between Entity and AComponent', function()
             expect(() =>
             {
                 e.add(PositionComponent);
+            }).to.throw();
+        });
+
+        it('should throw on adding two different components with same super class 1 (non complete test)', function()
+        {
+            const e = Entity.createWorld();
+            e.add(SpriteComponent);
+            expect(() =>
+            {
+                e.add(PositionComponent2);
             }).to.throw();
         });
     });
@@ -399,6 +409,45 @@ describe('Integration between Entity and AComponent', function()
         });
     });
 
+    describe('Entity.get', function()
+    {
+        it('should return the component', function()
+        {
+            const e = Entity.createWorld();
+            e.add(PositionComponent);
+            expect(e.get(PositionComponent) instanceof PositionComponent).to.be.true
+            expect(e.get(PositionComponent)).to.be.equal(e.position);
+        });
+
+        it('should return null if not found', function()
+        {
+            const e = Entity.createWorld();
+            expect(e.get(PositionComponent)).to.be.null;
+        });
+
+        it('should throw if pass not a component', function()
+        {
+            const e = Entity.createWorld();
+            expect(() =>
+            {
+                e.get([]);
+            }).to.throw();
+
+            expect(() =>
+            {
+                e.get(null);
+            }).to.throw();
+        });
+
+        it('should return the component if we pass a super class', function()
+        {
+            const e = Entity.createWorld();
+            e.add(SpriteComponent);
+            expect(e.get(DrawableComponent)).to.equal(e.sprite);
+        });
+
+    });
+
     describe('Entity.delete', function()
     {
         it('should delete the component', function()
@@ -427,6 +476,15 @@ describe('Integration between Entity and AComponent', function()
             expect(e.position).to.be.undefined;
             expect(e.has([VelocityComponent])).to.be.true;
             expect(e.velocity.velocity).equal(0);
+        });
+
+        it('should delete the component when given a super class', function()
+        {
+            const e = Entity.createWorld();
+            e.add(SpriteComponent);
+            expect(e.has([DrawableComponent])).to.be.true;
+            e.delete(DrawableComponent);
+            expect(e.has([DrawableComponent])).to.be.false;
         });
 
         it('should throw if component is not availble', function()
@@ -498,6 +556,15 @@ describe('Integration between Entity and AComponent', function()
             {
                 e2.deleteMany([PositionComponent, VelocityComponent]);
             }).to.throw();
+        });
+
+        it('should delete the component when given a super class', function()
+        {
+            const e = Entity.createWorld();
+            e.add(SpriteComponent);
+            expect(e.has([DrawableComponent])).to.be.true;
+            e.deleteMany([DrawableComponent]);
+            expect(e.has([DrawableComponent])).to.be.false;
         });
 
         it('should throw on passing non-array', function()

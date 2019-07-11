@@ -256,8 +256,27 @@ class Entity extends EventEmitter
         {
             this._assertAComponentType(ComponentType);
 
-            return this._hasComponent(ComponentType);
+            return this._findComponentIndex(ComponentType) !== -1;
         });
+    }
+
+    /**
+     * Get a specific component from this entity.
+     *
+     * You can pass a sub-class of your component, it will return it.
+     *
+     * @param {?AComponent} ComponentType Type of your component or a subclass to get. `null` if not found.
+     */
+    get(ComponentType)
+    {
+        this._assertAComponentType(ComponentType);
+        const componentIndex = this._findComponentIndex(ComponentType);
+
+        if (componentIndex !== -1)
+        {
+            return this._components[componentIndex];
+        }
+        return null;
     }
 
     /**
@@ -269,13 +288,14 @@ class Entity extends EventEmitter
     add(ComponentType, ...args)
     {
         this._assertAComponentType(ComponentType);
+
+        if (this[ComponentType.identity] || this._findComponentIndex(ComponentType) !== -1)
+        {
+            throw new Error('Can not add twice same component. Note that you can not add multiples components with same super class.');
+        }
+
         const component = new ComponentType(this, ...args);
         this._assertAComponent(component);
-
-        if (this[component.identity])
-        {
-            throw new Error('Can not add twice same component');
-        }
 
         this._components.push(component);
         this[component.identity] = component;
@@ -377,24 +397,6 @@ class Entity extends EventEmitter
     _findComponentIndex(ComponentType)
     {
         return this._components.findIndex(component =>
-        {
-            return ComponentType.identity === component.identity;
-        });
-    }
-
-    /**
-     * Know if any of the entity' components is or inherit from `ComponentType`.
-     *
-     * This function differ from `_findComponentIndex`:
-     * - this function check for any compatible component including inheritance
-     * - `_findComponentIndex` find the exact instance match
-     *
-     * @param {AComponent} ComponentType The component to find on this entity
-     * @return {Boolean} `true` if found
-     */
-    _hasComponent(ComponentType)
-    {
-        return this._components.some(component =>
         {
             return component instanceof ComponentType;
         });

@@ -60,6 +60,9 @@ class AComponent
 
     }
 
+    /**
+     * @returns {Entity} Owner of this component.
+     */
     get parent()
     {
         return this._parent;
