@@ -42,9 +42,11 @@ It fits cases when you need efficient entity hierarchy for small data set, fast 
 
 Everything is documented in the code. It is small enough so you can read the documentation there.
 
-In depth doc coming later.
+[You can also access documentation generated from code in doc/doc.md](doc/doc.md).
 
 # Tests
+
+    npm run test
 
 Tests are available in the `test` folder. They are easy to read but boring, take a look if you want
 to understand better how it works.

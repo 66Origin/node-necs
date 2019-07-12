@@ -27,7 +27,7 @@ class Entity extends EventEmitter
      * Create an entity which have no parent: it will represent a world. It will
      * be the 'root', and will have many childs.
      * 
-     * @param {?[AComponent]} ComponentsType Components to insert to the new entity. These components must be default-constructible.
+     * @param {?Array.<AComponent>} ComponentsType Components to insert to the new entity. These components must be default-constructible.
      * @return {Entity}
      */
     static createWorld(ComponentsType = null)
@@ -40,9 +40,8 @@ class Entity extends EventEmitter
      * Create a new entity.
      * You must NOT use this function: use `static createWorld()` or `createChild()`.
      * 
-     * @private
      * @param {?Entity} parent The parent of this new entity. `null` mean it is a 'world' entity
-     * @param {?[AComponent]} ComponentsType Components to insert to the new entity. These components must be default-constructible.
+     * @param {?Array.<AComponent>} ComponentsType Components to insert to the new entity. These components must be default-constructible.
      */
     constructor(parent, ComponentsType = null)
     {
@@ -69,7 +68,7 @@ class Entity extends EventEmitter
 
         /**
          * All components attached to this entity.
-         * @type {[AComponent]}
+         * @type {Array.<AComponent>}
          * @private
          */
         this._components = [];
@@ -111,7 +110,7 @@ class Entity extends EventEmitter
      * Create an entity which will be child of this entity.
      * 
      * @param {String} name Name of the child. You can later get the child using `_()` or `getChild()` functions.
-     * @param {?[AComponent]} ComponentsType Components to insert to the new entity. These components must be default-constructible.
+     * @param {?Array.<AComponent>} ComponentsType Components to insert to the new entity. These components must be default-constructible.
      * @return {Entity}
      */
     createChild(name, ComponentsType = null)
@@ -242,7 +241,7 @@ class Entity extends EventEmitter
      * You can by example have `ADrawableComponent` which is abstract and many implementations: `SpriteComponent`,
      * `TextComponent`, ...
      * 
-     * @param {[AComponent]} ComponentsType Components that may exist on this entity
+     * @param {Array.<AComponent>} ComponentsType Components that may exist on this entity
      * @return {Boolean} `true` if all components are present
      */
     has(ComponentsType)
@@ -303,7 +302,7 @@ class Entity extends EventEmitter
 
     /**
      * Add many components to this entity. Each component must be default-constructible.
-     * @param {[AComponent]} ComponentsType Type of the components to add
+     * @param {Array.<AComponent>} ComponentsType Type of the components to add
      */
     addMany(ComponentsType)
     {
@@ -342,7 +341,7 @@ class Entity extends EventEmitter
     /**
      * Delete specific components from this entity. If a component is not found,
      * an error will be thrown.
-     * @param {[AComponent]} ComponentsType Type of the components to delete
+     * @param {Array.<AComponent>} ComponentsType Type of the components to delete
      */
     deleteMany(ComponentsType)
     {

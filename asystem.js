@@ -28,7 +28,7 @@ class ASystem
      * to `update()`.
      *
      * @param {Entity} parent The entity which own the system.
-     * @param {[AComponent]} requiredComponents Components that are required for the entities passed to your update function.
+     * @param {Array.<AComponent>} requiredComponents Components that are required for the entities passed to your update function.
      */
     constructor(parent, requiredComponents)
     {
@@ -67,7 +67,7 @@ class ASystem
      * You must override this function, it is all the behaviors of your system.
      *
      * @override
-     * @param {[Entity]} entities All entities available in the tree which comply to the required components.
+     * @param {Array.<Entity>} entities All entities available in the tree which comply to the required components.
      */
     update(entities)
     {
