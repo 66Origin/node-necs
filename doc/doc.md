@@ -215,6 +215,7 @@ See `acomponents.js` or the example folder for more details about components.
 * [Entity](#Entity)
     * [new Entity([parent], [ComponentsType])](#new_Entity_new)
     * _instance_
+        * [.childs](#Entity+childs) ⇒ <code>Object</code>
         * [.parent](#Entity+parent) ⇒ [<code>Entity</code>](#Entity)
         * [.name](#Entity+name) ⇒ <code>String</code>
         * [.createChild(name, [ComponentsType])](#Entity+createChild) ⇒ [<code>Entity</code>](#Entity)
@@ -245,6 +246,17 @@ You must **NOT** use this function: use `static createWorld()` or `createChild()
 | [parent] | [<code>Entity</code>](#Entity) |  | The parent of this new entity. `null` mean it is a 'world' entity |
 | [ComponentsType] | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to insert to the new entity. These components must be default-constructible. |
 
+<a name="Entity+childs"></a>
+
+### entity.childs ⇒ <code>Object</code>
+Get all childs of this entity. The returned object is a copy of the internal representation and is frozen.
+
+So on, it is read-only.
+
+The returned object won't be kept up to date with later adding or deleting.
+
+**Kind**: instance property of [<code>Entity</code>](#Entity)  
+**Returns**: <code>Object</code> - An object with child name as key and child as value  
 <a name="Entity+parent"></a>
 
 ### entity.parent ⇒ [<code>Entity</code>](#Entity)

@@ -179,6 +179,21 @@ class Entity extends EventEmitter
     }
 
     /**
+     * Get all childs of this entity. The returned object is a copy of the internal representation and is frozen.
+     *
+     * So on, it is read-only.
+     *
+     * The returned object won't be kept up to date with later adding or deleting.
+     *
+     * @return {Object} An object with child name as key and child as value
+     */
+    get childs()
+    {
+        const childs = Object.assign({}, this._childs);
+        return Object.freeze(childs);
+    }
+
+    /**
      * Delete a child. An error will be thrown if child is not found.
      * 
      * @param {String} name Child name you want to delete

@@ -142,6 +142,48 @@ describe('Entity', function()
         });
     });
 
+    describe('#get childs', function()
+    {
+        it('should return all childs', function()
+        {
+            const world = Entity.createWorld();
+            const a = world.createChild('a');
+            const b = world.createChild('b');
+
+            const childs = world.childs;
+            expect(childs.a).to.equal(a);
+            expect(childs.b).to.equal(b);
+        });
+
+        it('should be frozen', function()
+        {
+            const world = Entity.createWorld();
+            const a = world.createChild('a');
+            const b = world.createChild('b');
+
+            const childs = world.childs;
+
+            expect(() =>
+            {
+                childs.a = null;
+            }).to.throw();
+        });
+
+        it('should not be kept up to date with later adding', function()
+        {
+            const world = Entity.createWorld();
+
+            const childs = world.childs;
+
+            const a = world.createChild('a');
+
+            expect(childs.a).to.be.undefined;
+
+            const childs2 = world.childs;
+            expect(childs2.a).to.equal(a);
+        });
+    });
+
     describe('#deleteChild', function()
     {
         it('should delete the child', function()
