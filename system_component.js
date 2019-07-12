@@ -1,14 +1,14 @@
 'use strict';
 const toPairs = require('lodash/toPairs');
 
-const { ASystemSymbol } = require('./internal/symbols')
+const { ASystemSymbol } = require('./internal/symbols');
 const AComponent = require('./acomponent');
 
 /**
- * `SystemComponent` allow you to add systems to an entity. We recommend to add it
- * only to root entities to keep simple and predictable behaviours.
+ * `SystemComponent` is a component which allow you to add systems to an entity. We recommend to add it
+ * only to world entities to keep simple and predictable behaviours.
  * 
- * System are always executed in the order they are added: first added, first executed.
+ * System are always executed in the order they are added: first added, first updated.
  *
  * To create your own system, take a look a the file `asystem.js`.
  */
@@ -31,7 +31,7 @@ class SystemComponent extends AComponent
      * 
      * System are always executed in the order they are added: first added, first executed.
      * 
-     * See ASystem documentation for more informations. 
+     * See `ASystem` documentation for more informations.
      * 
      * @param {ASystem} SystemType System to add.
      * @param {*} args Arguments to pass to system constructor
@@ -60,7 +60,7 @@ class SystemComponent extends AComponent
     }
 
     /**
-     * Call the `update()` function on all registered systems with the complying entities.
+     * Call the `update()` function on all registered systems.
      */
     update()
     {

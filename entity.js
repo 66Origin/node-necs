@@ -11,15 +11,13 @@ const { AComponentSymbol } = require('./internal/symbols');
 /**
  * An entity represent 'a thing' into your world.
  * 
- * By default, a component is empty: no behaviour, no meaning in your world. You
- * can create and attach components. As an example, you can create an entity named
+ * By default, a component is empty: no behaviours, no meaning, no purpose.
+ *
+ * - You can create and attach components. As an example, you can create an entity named
  * `wall` which have the following components: `Position`, `Hitbox`, `Sprite`.
+ * - You can create child entities.
  * 
  * See `acomponents.js` or the example folder for more details about components.
- * 
- * Notes:
- * - No tag system available yet as it may involve iterating all over the tree,
- * which may create bad performances. It may be added later with optimisations.
  */
 class Entity extends EventEmitter
 {
@@ -27,7 +25,7 @@ class Entity extends EventEmitter
      * Create an entity which have no parent: it will represent a world. It will
      * be the 'root', and will have many childs.
      * 
-     * @param {?Array.<AComponent>} ComponentsType Components to insert to the new entity. These components must be default-constructible.
+     * @param {Array.<AComponent>=} ComponentsType Components to insert to the new entity. These components must be default-constructible.
      * @return {Entity}
      */
     static createWorld(ComponentsType = null)
@@ -38,10 +36,11 @@ class Entity extends EventEmitter
 
     /**
      * Create a new entity.
-     * You must NOT use this function: use `static createWorld()` or `createChild()`.
+     *
+     * You must **NOT** use this function: use `static createWorld()` or `createChild()`.
      * 
-     * @param {?Entity} parent The parent of this new entity. `null` mean it is a 'world' entity
-     * @param {?Array.<AComponent>} ComponentsType Components to insert to the new entity. These components must be default-constructible.
+     * @param {Entity=} parent The parent of this new entity. `null` mean it is a 'world' entity
+     * @param {Array.<AComponent>=} ComponentsType Components to insert to the new entity. These components must be default-constructible.
      */
     constructor(parent, ComponentsType = null)
     {
@@ -97,6 +96,8 @@ class Entity extends EventEmitter
      * This function is automatically called on destruction. It will call
      * `destructor()` on every components. Do not use an entity after this
      * function being called.
+     *
+     * @private
      */
     _destructor()
     {
@@ -110,7 +111,7 @@ class Entity extends EventEmitter
      * Create an entity which will be child of this entity.
      * 
      * @param {String} name Name of the child. You can later get the child using `_()` or `getChild()` functions.
-     * @param {?Array.<AComponent>} ComponentsType Components to insert to the new entity. These components must be default-constructible.
+     * @param {Array.<AComponent>=} ComponentsType Components to add to the new entity. These components must be default-constructible.
      * @return {Entity}
      */
     createChild(name, ComponentsType = null)
@@ -180,7 +181,7 @@ class Entity extends EventEmitter
     /**
      * Delete a child. An error will be thrown if child is not found.
      * 
-     * @param {String} name Child name you want to get
+     * @param {String} name Child name you want to delete
      */
     deleteChild(name)
     {
@@ -198,7 +199,7 @@ class Entity extends EventEmitter
     }
 
     /**
-     * Delete this entity. It must be a child of another entity, else an error will
+     * Delete this entity. It must be have a parent, else an error will
      * be thrown.
      */
     deleteThis()
@@ -224,7 +225,7 @@ class Entity extends EventEmitter
     }
 
     /**
-     * Get the name of this entity. All entities have a name excepted root entities wich have no parent as a world.
+     * Get the name of this entity. All entities have a name excepted world entities which have no parent.
      *
      * @returns {?String} Name of this entity
      */
@@ -238,7 +239,7 @@ class Entity extends EventEmitter
      * If not components are given, it will return `true`.
      *
      * This function will also return `true` if you give a super class of an installed component.
-     * You can by example have `ADrawableComponent` which is abstract and many implementations: `SpriteComponent`,
+     * You can by example have `ADrawableComponent` which is inherited by `SpriteComponent`,
      * `TextComponent`, ...
      * 
      * @param {Array.<AComponent>} ComponentsType Components that may exist on this entity
@@ -262,9 +263,9 @@ class Entity extends EventEmitter
     /**
      * Get a specific component from this entity.
      *
-     * You can pass a sub-class of your component, it will return it.
+     * If you pass a super class of your component, it will return it.
      *
-     * @param {?AComponent} ComponentType Type of your component or a subclass to get. `null` if not found.
+     * @param {AComponent=} ComponentType Type of your component or a subclass to get. `null` if not found.
      */
     get(ComponentType)
     {
@@ -302,7 +303,7 @@ class Entity extends EventEmitter
 
     /**
      * Add many components to this entity. Each component must be default-constructible.
-     * @param {Array.<AComponent>} ComponentsType Type of the components to add
+     * @param {Array.<AComponent>} ComponentsType Types of the components to add
      */
     addMany(ComponentsType)
     {

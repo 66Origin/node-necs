@@ -6,44 +6,42 @@
 represent a position (x,y), a hitbox or a texture.</p>
 <p>The <code>A</code> in <code>AComponent</code> is for Abstract, it means you can not construct but you
 must inherit it. A non-inherited <code>AComponent</code> represent nothing.</p>
-<p>So on, you must inherit it, specify your datas and/or behaviour. You can
-set your behaviors in the <code>update()</code> function or in public functions. You can
-access the parent entity, you can access others components.</p>
-<p>If your component require others components, you must check their presence
+<p>So on, you must inherit it, specify your datas and/or behaviours. You can
+set your behaviours in the <code>update()</code> function or in public functions. You can
+access the parent entity, and others components.</p>
+<p>If your component require others components, you must check their existence
 in the constructor and throw if they are missing. Remember, if you want to
 follow this project design, you must fail-fast. It means you check every error-case
-and throw as soon as possible. Better see sooner than undefined behaviors in production.</p>
-<p>The <code>update()</code> function automatically called when your entity tree got its function
+and throw as soon as possible. Better see sooner than unreproducible undefined behaviors in production.</p>
+<p>The <code>update()</code> function is automatically called when your entity tree got its function
 <code>update()</code> called.</p>
 </dd>
 <dt><a href="#ASystem">ASystem</a></dt>
-<dd><p><code>ASystem</code> mean Abstract System. You must inherit this class to create systems.</p>
-<p>A system is a &#39;module&#39; on which <code>update()</code> will run on each <code>update()</code> call from the world entity.
+<dd><p><code>ASystem</code> mean Abstract System. You can create systems by inheriting this class.</p>
+<p>A system is a &#39;module&#39; on which <code>ASystem.update()</code> will run on each <code>Entity.update()</code> call from the world entity.
 It perform predictable actions on a set of entities.</p>
 <p>On inheriting ASystem, you must set a constructor which call <code>super()</code>. First argument is the parent which will be
-given to your constructor. The second argument must be specified from your constructor. It must be an array with all
+given to your constructor. The second argument must be specified from your constructor: it must be an array with all
 the components the system can work on.</p>
 <p>When <code>update(entities)</code> is called, first argument is an array of entities, which comply to your components requirements.
 All entities that have all the required components will be in the given array.</p>
-<p>See examples to understand how systems work. Also take a look to <code>system_component.js</code> file. It is a component that
-let you add systems to any entities.</p>
+<p>See examples to understand how systems work.</p>
+<p>To create systems, you must add <code>SystemComponent</code> to your world entity.</p>
 </dd>
 <dt><a href="#Entity">Entity</a></dt>
 <dd><p>An entity represent &#39;a thing&#39; into your world.</p>
-<p>By default, a component is empty: no behaviour, no meaning in your world. You
-can create and attach components. As an example, you can create an entity named
-<code>wall</code> which have the following components: <code>Position</code>, <code>Hitbox</code>, <code>Sprite</code>.</p>
-<p>See <code>acomponents.js</code> or the example folder for more details about components.</p>
-<p>Notes:</p>
+<p>By default, a component is empty: no behaviours, no meaning, no purpose.</p>
 <ul>
-<li>No tag system available yet as it may involve iterating all over the tree,
-which may create bad performances. It may be added later with optimisations.</li>
+<li>You can create and attach components. As an example, you can create an entity named
+<code>wall</code> which have the following components: <code>Position</code>, <code>Hitbox</code>, <code>Sprite</code>.</li>
+<li>You can create child entities.</li>
 </ul>
+<p>See <code>acomponents.js</code> or the example folder for more details about components.</p>
 </dd>
 <dt><a href="#SystemComponent">SystemComponent</a></dt>
-<dd><p><code>SystemComponent</code> allow you to add systems to an entity. We recommend to add it
-only to root entities to keep simple and predictable behaviours.</p>
-<p>System are always executed in the order they are added: first added, first executed.</p>
+<dd><p><code>SystemComponent</code> is a component which allow you to add systems to an entity. We recommend to add it
+only to world entities to keep simple and predictable behaviours.</p>
+<p>System are always executed in the order they are added: first added, first updated.</p>
 <p>To create your own system, take a look a the file <code>asystem.js</code>.</p>
 </dd>
 </dl>
@@ -57,16 +55,16 @@ represent a position (x,y), a hitbox or a texture.
 The `A` in `AComponent` is for Abstract, it means you can not construct but you
 must inherit it. A non-inherited `AComponent` represent nothing.
 
-So on, you must inherit it, specify your datas and/or behaviour. You can
-set your behaviors in the `update()` function or in public functions. You can
-access the parent entity, you can access others components.
+So on, you must inherit it, specify your datas and/or behaviours. You can
+set your behaviours in the `update()` function or in public functions. You can
+access the parent entity, and others components.
 
-If your component require others components, you must check their presence
+If your component require others components, you must check their existence
 in the constructor and throw if they are missing. Remember, if you want to
 follow this project design, you must fail-fast. It means you check every error-case
-and throw as soon as possible. Better see sooner than undefined behaviors in production.
+and throw as soon as possible. Better see sooner than unreproducible undefined behaviors in production.
 
-The `update()` function automatically called when your entity tree got its function
+The `update()` function is automatically called when your entity tree got its function
 `update()` called.
 
 **Kind**: global class  
@@ -76,15 +74,15 @@ The `update()` function automatically called when your entity tree got its funct
     * _instance_
         * [.parent](#AComponent+parent) ⇒ [<code>Entity</code>](#Entity)
         * [.identity](#AComponent+identity) ⇒ <code>String</code>
-        * [.destructor()](#AComponent+destructor)
         * [.update()](#AComponent+update)
+        * [.destructor()](#AComponent+destructor)
     * _static_
         * [.identity](#AComponent.identity) ⇒ <code>String</code>
 
 <a name="new_AComponent_new"></a>
 
 ### new AComponent(parent)
-On inheritting `AComponent`, `parentEntity` will be passed to your constructor among
+On inheriting `AComponent`, `parent` will be passed to your constructor among
 your own arguments. You must keep `parentEntity` first, then your arguments.
 
 
@@ -101,23 +99,24 @@ your own arguments. You must keep `parentEntity` first, then your arguments.
 
 ### aComponent.identity ⇒ <code>String</code>
 On inheriting AComponent, you must override this function to return the
-component name from your class static function name. See below for
-more informations.
+component name from your class static function name.
+
+See static function `AComponent.identity`.
 
 **Kind**: instance property of [<code>AComponent</code>](#AComponent)  
+<a name="AComponent+update"></a>
+
+### aComponent.update()
+This function will be called on each new frame. You must override it to
+specify your own behaviors.
+
+**Kind**: instance method of [<code>AComponent</code>](#AComponent)  
 <a name="AComponent+destructor"></a>
 
 ### aComponent.destructor()
 This function will be called on destruction.
 
 You can do some cleanup if needed.
-
-**Kind**: instance method of [<code>AComponent</code>](#AComponent)  
-<a name="AComponent+update"></a>
-
-### aComponent.update()
-This function will be called on each new frame. You must override it to
-specify your own behaviors.
 
 **Kind**: instance method of [<code>AComponent</code>](#AComponent)  
 <a name="AComponent.identity"></a>
@@ -128,56 +127,69 @@ On inheriting AComponent, you must override this function to return the componen
 The component name will be the easy-access key on your entity. If you set
 `position`, you will be able to access the component using `entity.position`.
 
-It should be unique.
+It must be unique.
 
-See above for the instance version of this function.
+See the instance function `AComponent.identity`.
 
 **Kind**: static property of [<code>AComponent</code>](#AComponent)  
 <a name="ASystem"></a>
 
 ## ASystem
-`ASystem` mean Abstract System. You must inherit this class to create systems.
+`ASystem` mean Abstract System. You can create systems by inheriting this class.
 
-A system is a 'module' on which `update()` will run on each `update()` call from the world entity.
+A system is a 'module' on which `ASystem.update()` will run on each `Entity.update()` call from the world entity.
 It perform predictable actions on a set of entities.
 
 On inheriting ASystem, you must set a constructor which call `super()`. First argument is the parent which will be
-given to your constructor. The second argument must be specified from your constructor. It must be an array with all
+given to your constructor. The second argument must be specified from your constructor: it must be an array with all
 the components the system can work on.
 
 When `update(entities)` is called, first argument is an array of entities, which comply to your components requirements.
 All entities that have all the required components will be in the given array.
 
-See examples to understand how systems work. Also take a look to `system_component.js` file. It is a component that
-let you add systems to any entities.
+See examples to understand how systems work.
+
+To create systems, you must add `SystemComponent` to your world entity.
 
 **Kind**: global class  
 
 * [ASystem](#ASystem)
     * [new ASystem(parent, requiredComponents)](#new_ASystem_new)
+    * [.parent](#ASystem+parent) ⇒ [<code>Entity</code>](#Entity)
+    * [.requiredComponents](#ASystem+requiredComponents) ⇒ [<code>Array.&lt;AComponent&gt;</code>](#AComponent)
     * [.update(entities)](#ASystem+update)
 
 <a name="new_ASystem_new"></a>
 
 ### new ASystem(parent, requiredComponents)
-On inheriting `ASystem`, parent will be given to your constructor as first argument. You just have to pass
+On inheriting `ASystem`, `parent` will be given to your constructor as first argument. You just have to pass
 `parent` to `super()`.
 
 `requiredComponents` must be specified by yourself: all the components you want in the entities that will be passed
-to `update()`.
+to `update()`. It is an entity filter by components.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | parent | [<code>Entity</code>](#Entity) | The entity which own the system. |
-| requiredComponents | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | Components that are required for the entities passed to your update function. |
+| requiredComponents | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | Components filter to get complying entities which will be given to `update()` function. |
 
+<a name="ASystem+parent"></a>
+
+### aSystem.parent ⇒ [<code>Entity</code>](#Entity)
+**Kind**: instance property of [<code>ASystem</code>](#ASystem)  
+**Returns**: [<code>Entity</code>](#Entity) - The Entity which own this system.  
+<a name="ASystem+requiredComponents"></a>
+
+### aSystem.requiredComponents ⇒ [<code>Array.&lt;AComponent&gt;</code>](#AComponent)
+**Kind**: instance property of [<code>ASystem</code>](#ASystem)  
+**Returns**: [<code>Array.&lt;AComponent&gt;</code>](#AComponent) - The components which will filter entities to be given to `update()`.  
 <a name="ASystem+update"></a>
 
 ### aSystem.update(entities)
 This function will be called on each `update()` call from the parent entity or an entity which own the parent.
 
-You must override this function, it is all the behaviors of your system.
+You must override this function, it represent the behaviours of your system.
 
 **Kind**: instance method of [<code>ASystem</code>](#ASystem)  
 
@@ -190,50 +202,48 @@ You must override this function, it is all the behaviors of your system.
 ## Entity
 An entity represent 'a thing' into your world.
 
-By default, a component is empty: no behaviour, no meaning in your world. You
-can create and attach components. As an example, you can create an entity named
+By default, a component is empty: no behaviours, no meaning, no purpose.
+
+- You can create and attach components. As an example, you can create an entity named
 `wall` which have the following components: `Position`, `Hitbox`, `Sprite`.
+- You can create child entities.
 
 See `acomponents.js` or the example folder for more details about components.
-
-Notes:
-- No tag system available yet as it may involve iterating all over the tree,
-which may create bad performances. It may be added later with optimisations.
 
 **Kind**: global class  
 
 * [Entity](#Entity)
-    * [new Entity(parent, ComponentsType)](#new_Entity_new)
+    * [new Entity([parent], [ComponentsType])](#new_Entity_new)
     * _instance_
         * [.parent](#Entity+parent) ⇒ [<code>Entity</code>](#Entity)
         * [.name](#Entity+name) ⇒ <code>String</code>
-        * [._destructor()](#Entity+_destructor)
-        * [.createChild(name, ComponentsType)](#Entity+createChild) ⇒ [<code>Entity</code>](#Entity)
+        * [.createChild(name, [ComponentsType])](#Entity+createChild) ⇒ [<code>Entity</code>](#Entity)
         * [.update()](#Entity+update)
         * [._(name)](#Entity+_) ⇒ [<code>Entity</code>](#Entity)
         * [.getChild(name)](#Entity+getChild) ⇒ [<code>Entity</code>](#Entity)
         * [.deleteChild(name)](#Entity+deleteChild)
         * [.deleteThis()](#Entity+deleteThis)
         * [.has(ComponentsType)](#Entity+has) ⇒ <code>Boolean</code>
-        * [.get(ComponentType)](#Entity+get)
+        * [.get([ComponentType])](#Entity+get)
         * [.add(ComponentType, ...args)](#Entity+add)
         * [.addMany(ComponentsType)](#Entity+addMany)
         * [.delete(ComponentType)](#Entity+delete)
         * [.deleteMany(ComponentsType)](#Entity+deleteMany)
     * _static_
-        * [.createWorld(ComponentsType)](#Entity.createWorld) ⇒ [<code>Entity</code>](#Entity)
+        * [.createWorld([ComponentsType])](#Entity.createWorld) ⇒ [<code>Entity</code>](#Entity)
 
 <a name="new_Entity_new"></a>
 
-### new Entity(parent, ComponentsType)
+### new Entity([parent], [ComponentsType])
 Create a new entity.
-You must NOT use this function: use `static createWorld()` or `createChild()`.
+
+You must **NOT** use this function: use `static createWorld()` or `createChild()`.
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| parent | [<code>Entity</code>](#Entity) |  | The parent of this new entity. `null` mean it is a 'world' entity |
-| ComponentsType | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to insert to the new entity. These components must be default-constructible. |
+| [parent] | [<code>Entity</code>](#Entity) |  | The parent of this new entity. `null` mean it is a 'world' entity |
+| [ComponentsType] | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to insert to the new entity. These components must be default-constructible. |
 
 <a name="Entity+parent"></a>
 
@@ -247,21 +257,13 @@ If this entity represent the world, it will return `null`.
 <a name="Entity+name"></a>
 
 ### entity.name ⇒ <code>String</code>
-Get the name of this entity. All entities have a name excepted root entities wich have no parent as a world.
+Get the name of this entity. All entities have a name excepted world entities which have no parent.
 
 **Kind**: instance property of [<code>Entity</code>](#Entity)  
 **Returns**: <code>String</code> - Name of this entity  
-<a name="Entity+_destructor"></a>
-
-### entity.\_destructor()
-This function is automatically called on destruction. It will call
-`destructor()` on every components. Do not use an entity after this
-function being called.
-
-**Kind**: instance method of [<code>Entity</code>](#Entity)  
 <a name="Entity+createChild"></a>
 
-### entity.createChild(name, ComponentsType) ⇒ [<code>Entity</code>](#Entity)
+### entity.createChild(name, [ComponentsType]) ⇒ [<code>Entity</code>](#Entity)
 Create an entity which will be child of this entity.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
@@ -269,7 +271,7 @@ Create an entity which will be child of this entity.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | name | <code>String</code> |  | Name of the child. You can later get the child using `_()` or `getChild()` functions. |
-| ComponentsType | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to insert to the new entity. These components must be default-constructible. |
+| [ComponentsType] | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to add to the new entity. These components must be default-constructible. |
 
 <a name="Entity+update"></a>
 
@@ -313,12 +315,12 @@ Delete a child. An error will be thrown if child is not found.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>String</code> | Child name you want to get |
+| name | <code>String</code> | Child name you want to delete |
 
 <a name="Entity+deleteThis"></a>
 
 ### entity.deleteThis()
-Delete this entity. It must be a child of another entity, else an error will
+Delete this entity. It must be have a parent, else an error will
 be thrown.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
@@ -329,7 +331,7 @@ Know if components are present on this entity.
 If not components are given, it will return `true`.
 
 This function will also return `true` if you give a super class of an installed component.
-You can by example have `ADrawableComponent` which is abstract and many implementations: `SpriteComponent`,
+You can by example have `ADrawableComponent` which is inherited by `SpriteComponent`,
 `TextComponent`, ...
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
@@ -341,16 +343,16 @@ You can by example have `ADrawableComponent` which is abstract and many implemen
 
 <a name="Entity+get"></a>
 
-### entity.get(ComponentType)
+### entity.get([ComponentType])
 Get a specific component from this entity.
 
-You can pass a sub-class of your component, it will return it.
+If you pass a super class of your component, it will return it.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| ComponentType | [<code>AComponent</code>](#AComponent) | Type of your component or a subclass to get. `null` if not found. |
+| [ComponentType] | [<code>AComponent</code>](#AComponent) | Type of your component or a subclass to get. `null` if not found. |
 
 <a name="Entity+add"></a>
 
@@ -373,7 +375,7 @@ Add many components to this entity. Each component must be default-constructible
 
 | Param | Type | Description |
 | --- | --- | --- |
-| ComponentsType | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | Type of the components to add |
+| ComponentsType | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | Types of the components to add |
 
 <a name="Entity+delete"></a>
 
@@ -401,7 +403,7 @@ an error will be thrown.
 
 <a name="Entity.createWorld"></a>
 
-### Entity.createWorld(ComponentsType) ⇒ [<code>Entity</code>](#Entity)
+### Entity.createWorld([ComponentsType]) ⇒ [<code>Entity</code>](#Entity)
 Create an entity which have no parent: it will represent a world. It will
 be the 'root', and will have many childs.
 
@@ -409,15 +411,15 @@ be the 'root', and will have many childs.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| ComponentsType | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to insert to the new entity. These components must be default-constructible. |
+| [ComponentsType] | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to insert to the new entity. These components must be default-constructible. |
 
 <a name="SystemComponent"></a>
 
 ## SystemComponent
-`SystemComponent` allow you to add systems to an entity. We recommend to add it
-only to root entities to keep simple and predictable behaviours.
+`SystemComponent` is a component which allow you to add systems to an entity. We recommend to add it
+only to world entities to keep simple and predictable behaviours.
 
-System are always executed in the order they are added: first added, first executed.
+System are always executed in the order they are added: first added, first updated.
 
 To create your own system, take a look a the file `asystem.js`.
 
@@ -435,7 +437,7 @@ Add a system.
 
 System are always executed in the order they are added: first added, first executed.
 
-See ASystem documentation for more informations.
+See `ASystem` documentation for more informations.
 
 **Kind**: instance method of [<code>SystemComponent</code>](#SystemComponent)  
 
@@ -458,6 +460,6 @@ Delete a system. If system is not found, an error will be thrown.
 <a name="SystemComponent+update"></a>
 
 ### systemComponent.update()
-Call the `update()` function on all registered systems with the complying entities.
+Call the `update()` function on all registered systems.
 
 **Kind**: instance method of [<code>SystemComponent</code>](#SystemComponent)  

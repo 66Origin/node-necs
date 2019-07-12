@@ -9,22 +9,22 @@ const { AComponentSymbol } = require('./internal/symbols');
  * The `A` in `AComponent` is for Abstract, it means you can not construct but you
  * must inherit it. A non-inherited `AComponent` represent nothing.
  * 
- * So on, you must inherit it, specify your datas and/or behaviour. You can
- * set your behaviors in the `update()` function or in public functions. You can
- * access the parent entity, you can access others components.
+ * So on, you must inherit it, specify your datas and/or behaviours. You can
+ * set your behaviours in the `update()` function or in public functions. You can
+ * access the parent entity, and others components.
  * 
- * If your component require others components, you must check their presence
+ * If your component require others components, you must check their existence
  * in the constructor and throw if they are missing. Remember, if you want to
  * follow this project design, you must fail-fast. It means you check every error-case
- * and throw as soon as possible. Better see sooner than undefined behaviors in production.
+ * and throw as soon as possible. Better see sooner than unreproducible undefined behaviors in production.
  * 
- * The `update()` function automatically called when your entity tree got its function
+ * The `update()` function is automatically called when your entity tree got its function
  * `update()` called.
  */
 class AComponent
 {
     /**
-     * On inheritting `AComponent`, `parentEntity` will be passed to your constructor among
+     * On inheriting `AComponent`, `parent` will be passed to your constructor among
      * your own arguments. You must keep `parentEntity` first, then your arguments.
      *
      * @param {Entity} parent The entity which own this component
@@ -50,17 +50,6 @@ class AComponent
     }
 
     /**
-     * This function will be called on destruction.
-     * 
-     * You can do some cleanup if needed.
-     * @override
-     */
-    destructor()
-    {
-
-    }
-
-    /**
      * @returns {Entity} Owner of this component.
      */
     get parent()
@@ -79,10 +68,22 @@ class AComponent
     }
 
     /**
+     * This function will be called on destruction.
+     *
+     * You can do some cleanup if needed.
+     * @override
+     */
+    destructor()
+    {
+
+    }
+
+    /**
      * On inheriting AComponent, you must override this function to return the
-     * component name from your class static function name. See below for
-     * more informations.
-     * 
+     * component name from your class static function name.
+     *
+     * See static function `AComponent.identity`.
+     *
      * @override
      * @returns {?String}
      */
@@ -97,9 +98,9 @@ class AComponent
      * The component name will be the easy-access key on your entity. If you set
      * `position`, you will be able to access the component using `entity.position`.
      * 
-     * It should be unique.
+     * It must be unique.
      * 
-     * See above for the instance version of this function.
+     * See the instance function `AComponent.identity`.
      *
      * @override
      * @returns {?String}
