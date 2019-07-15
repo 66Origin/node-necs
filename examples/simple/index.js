@@ -32,7 +32,7 @@ class DataSystem extends ASystem
     super(parent, [DataComponent]);
   }
 
-  update(entities)
+  earlyUpdate(entities)
   {
     entities.forEach(entity =>
     {

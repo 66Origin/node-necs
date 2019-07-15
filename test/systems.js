@@ -78,7 +78,8 @@ describe('Integration between components and systems', function()
         {
             it('should call update on the system', function()
             {
-                let called = false;
+                let calledEarly = false;
+                let calledLate = false;
                 class ExampleSystem2 extends ASystem
                 {
                     constructor(parent)
@@ -86,16 +87,30 @@ describe('Integration between components and systems', function()
                         super(parent, []);
                     }
 
-                    update()
+                    earlyUpdate()
                     {
-                        called = true;
+                        if (calledLate)
+                        {
+                            throw new Error('early should be called before late');
+                        }
+                        calledEarly = true;
+                    }
+
+                    lateUpdate()
+                    {
+                        if (!calledEarly)
+                        {
+                            throw new Error('late should be called after early');
+                        }
+                        calledLate = true;
                     }
                 }
 
                 const e = Entity.createWorld([SystemComponent]);
                 e.systems.add(ExampleSystem2);
                 e.update();
-                expect(called).to.be.true;
+                expect(calledEarly).to.be.true;
+                expect(calledLate).to.be.true;
             });
         });
     });
@@ -152,7 +167,8 @@ describe('Integration between components and systems', function()
         {
             const e = Entity.createWorld([SystemComponent]);
 
-            let called = false;
+            let calledEarly = false;
+            let calledLate = false;
 
             class ExampleComponent extends AComponent
             {
@@ -175,11 +191,18 @@ describe('Integration between components and systems', function()
                     this.payload = payload;
                 }
 
-                update(entities)
+                earlyUpdate(entities)
                 {
                     expect(entities.length).to.equal(1);
                     expect(entities[0]).to.equal(e.getChild('1'));
-                    called = true;
+                    calledEarly = true;
+                }
+
+                lateUpdate(entities)
+                {
+                    expect(entities.length).to.equal(1);
+                    expect(entities[0]).to.equal(e.getChild('1'));
+                    calledLate = true;
                 }
             }
 
@@ -187,7 +210,8 @@ describe('Integration between components and systems', function()
             const child1 = e.createChild('1', [ExampleComponent]);
             const child2 = e.createChild('2');
             e.update();
-            expect(called).to.be.true;
+            expect(calledEarly).to.be.true;
+            expect(calledLate).to.be.true;
         });
     });
 });

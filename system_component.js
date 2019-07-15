@@ -60,18 +60,44 @@ class SystemComponent extends AComponent
     }
 
     /**
-     * Call the `update()` function on all registered systems.
+     * Call `earlyUpdate()` on all registered systems.
      */
-    update()
+    earlyUpdate()
     {
         // Get all entities which comply to required components.
         const rootEntity = this.parent;
 
         this._systems.forEach(system =>
         {
+            if (!system.earlyUpdate)
+            {
+                return;
+            }
+
             const complyingEntities = [];
             this._findComplyingEntities(rootEntity, system, complyingEntities);
-            system.update(complyingEntities);
+            system.earlyUpdate(complyingEntities);
+        });
+    }
+
+    /**
+     * Call `lateUpdate()` on all registered systems.
+     */
+    lateUpdate()
+    {
+        // Get all entities which comply to required components.
+        const rootEntity = this.parent;
+
+        this._systems.forEach(system =>
+        {
+            if (!system.lateUpdate)
+            {
+                return;
+            }
+
+            const complyingEntities = [];
+            this._findComplyingEntities(rootEntity, system, complyingEntities);
+            system.lateUpdate(complyingEntities);
         });
     }
 

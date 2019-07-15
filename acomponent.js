@@ -58,11 +58,19 @@ class AComponent
     }
 
     /**
-     * This function will be called on each new frame. You must override it to
-     * specify your own behaviors.
+     * Early update of this component. See `Entity` documentation for more information.
      * @override
      */
-    update()
+    earlyUpdate()
+    {
+
+    }
+
+    /**
+     * Late update of this component. See `Entity` documentation for more information.
+     * @override
+     */
+    lateUpdate()
     {
 
     }

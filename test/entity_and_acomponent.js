@@ -621,13 +621,23 @@ describe('Integration between Entity and AComponent', function()
     {
         it('should call update on every childs and component', function()
         {
-            let updateCount = 0;
+            let updateEarlyCount = 0;
+            let updateLateCount = 0;
 
             class UpdateComponent extends AComponent
             {
-                update()
+                earlyUpdate()
                 {
-                    ++updateCount;
+                    ++updateEarlyCount;
+                }
+
+                lateUpdate()
+                {
+                    if (updateEarlyCount === 0)
+                    {
+                        throw new Error('earlyUpdate should have been called before lateUpdate');
+                    }
+                    ++updateLateCount;
                 }
 
                 get identity()
@@ -645,13 +655,16 @@ describe('Integration between Entity and AComponent', function()
             const child1 = e.createChild('1', [UpdateComponent]);
             const child2 = e.createChild('2', [UpdateComponent]);
 
-            expect(updateCount).to.equal(0);
+            expect(updateEarlyCount).to.equal(0);
+            expect(updateLateCount).to.equal(0);
 
             e.update();
-            expect(updateCount).to.equal(2);
+            expect(updateEarlyCount).to.equal(2);
+            expect(updateLateCount).to.equal(2);
 
             child1.update();
-            expect(updateCount).to.equal(3);
+            expect(updateEarlyCount).to.equal(3);
+            expect(updateLateCount).to.equal(3);
         });
     });
 });

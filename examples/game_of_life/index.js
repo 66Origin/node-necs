@@ -74,7 +74,7 @@ class CellsRulesSystem extends ASystem
         super(parent, [CellComponent]);
     }
 
-    update(entities)
+    earlyUpdate(entities)
     {
         const positionsToCreate = [];
 
@@ -194,7 +194,7 @@ class DeleteDeadCellsSystem extends ASystem
         super(parent, [CellComponent]);
     }
 
-    update(entities)
+    earlyUpdate(entities)
     {
         entities.forEach(entity =>
         {
@@ -219,7 +219,7 @@ class DrawSystem extends ASystem
         this._canvas.reset();
     }
 
-    update(entities)
+    earlyUpdate(entities)
     {
         this._canvas.eraseScreen();
         entities.forEach(entity =>

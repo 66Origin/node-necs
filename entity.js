@@ -18,6 +18,19 @@ const { AComponentSymbol } = require('./internal/symbols');
  * - You can create child entities.
  * 
  * See `acomponents.js` or the example folder for more details about components.
+ *
+ * On updating an entity, this procedure apply:
+ * - Call `earlyUpdate()` on child entities (which call `earlyUpdate()` on child entities then components)
+ * - Call `earlyUpdate()` on entity's components
+ * - Call `lateUpdate()` on child entities (which call `lateUpdate()` on child entities then components)
+ * - Call `lateUpdate()` on entity's components
+ *
+ * It may be useful if you have a drawing system:
+ * - On your world, a component is drawing sprites on screen
+ * - Childs of your world are sprites.
+ * - First, sprites get `earlyUpdate()` called
+ * - Then, drawing system get `earlyUpdate()` called
+ * - Finally, sprites get `lateUpdate()` called
  */
 class Entity extends EventEmitter
 {
@@ -133,20 +146,49 @@ class Entity extends EventEmitter
     }
 
     /**
-     * Update all childs then our own components. This will call `update()` on
-     * all child entities and on all components from this entity and childs.
+     * Call `earlyUpdate()` on childs then this entity own components.
+     * @private
      */
-    update()
+    _earlyUpdate()
     {
         toPairs(this._childs).forEach(child =>
         {
-            child[1].update();
+            child[1]._earlyUpdate();
         });
 
         this._components.forEach(component =>
         {
-            component.update();
+                component.earlyUpdate();
         });
+    }
+
+    /**
+     * Call `lateUpdate()` on childs then this entity own components.
+     * @private
+     */
+    _lateUpdate()
+    {
+        toPairs(this._childs).forEach(child =>
+        {
+            child[1]._lateUpdate();
+        });
+
+        this._components.forEach(component =>
+        {
+                component.lateUpdate();
+        });
+    }
+
+    /**
+     * Call `earlyUpdate()` then `lateUpdate()`. See documentation of Entity for more information about
+     * the `update()`.
+     *
+     * You should call this function only on your world Entity.
+     */
+    update()
+    {
+        this._earlyUpdate();
+        this._lateUpdate();
     }
 
     /**

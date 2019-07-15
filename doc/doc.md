@@ -18,12 +18,14 @@ and throw as soon as possible. Better see sooner than unreproducible undefined b
 </dd>
 <dt><a href="#ASystem">ASystem</a></dt>
 <dd><p><code>ASystem</code> mean Abstract System. You can create systems by inheriting this class.</p>
-<p>A system is a &#39;module&#39; on which <code>ASystem.update()</code> will run on each <code>Entity.update()</code> call from the world entity.
+<p>A system is a &#39;module&#39; on which <code>ASystem.earlyUpdate()</code> and <code>ASystem.lateUpdate()</code> will run on each <code>Entity.update()</code>
+call from the world entity.
 It perform predictable actions on a set of entities.</p>
 <p>On inheriting ASystem, you must set a constructor which call <code>super()</code>. First argument is the parent which will be
 given to your constructor. The second argument must be specified from your constructor: it must be an array with all
 the components the system can work on.</p>
-<p>When <code>update(entities)</code> is called, first argument is an array of entities, which comply to your components requirements.
+<p>You must implement <code>earlyUpdate(entities)</code> and/or <code>lateUpdate(entities)</code>.
+First argument is an array of entities, which comply to your components requirements.
 All entities that have all the required components will be in the given array.</p>
 <p>See examples to understand how systems work.</p>
 <p>To create systems, you must add <code>SystemComponent</code> to your world entity.</p>
@@ -37,6 +39,21 @@ All entities that have all the required components will be in the given array.</
 <li>You can create child entities.</li>
 </ul>
 <p>See <code>acomponents.js</code> or the example folder for more details about components.</p>
+<p>On updating an entity, this procedure apply:</p>
+<ul>
+<li>Call <code>earlyUpdate()</code> on child entities (which call <code>earlyUpdate()</code> on child entities then components)</li>
+<li>Call <code>earlyUpdate()</code> on entity&#39;s components</li>
+<li>Call <code>lateUpdate()</code> on child entities (which call <code>lateUpdate()</code> on child entities then components)</li>
+<li>Call <code>lateUpdate()</code> on entity&#39;s components</li>
+</ul>
+<p>It may be useful if you have a drawing system:</p>
+<ul>
+<li>On your world, a component is drawing sprites on screen</li>
+<li>Childs of your world are sprites.</li>
+<li>First, sprites get <code>earlyUpdate()</code> called</li>
+<li>Then, drawing system get <code>earlyUpdate()</code> called</li>
+<li>Finally, sprites get <code>lateUpdate()</code> called</li>
+</ul>
 </dd>
 <dt><a href="#SystemComponent">SystemComponent</a></dt>
 <dd><p><code>SystemComponent</code> is a component which allow you to add systems to an entity. We recommend to add it
@@ -74,7 +91,8 @@ The `update()` function is automatically called when your entity tree got its fu
     * _instance_
         * [.parent](#AComponent+parent) ⇒ [<code>Entity</code>](#Entity)
         * [.identity](#AComponent+identity) ⇒ <code>String</code>
-        * [.update()](#AComponent+update)
+        * [.earlyUpdate()](#AComponent+earlyUpdate)
+        * [.lateUpdate()](#AComponent+lateUpdate)
         * [.destructor()](#AComponent+destructor)
     * _static_
         * [.identity](#AComponent.identity) ⇒ <code>String</code>
@@ -104,11 +122,16 @@ component name from your class static function name.
 See static function `AComponent.identity`.
 
 **Kind**: instance property of [<code>AComponent</code>](#AComponent)  
-<a name="AComponent+update"></a>
+<a name="AComponent+earlyUpdate"></a>
 
-### aComponent.update()
-This function will be called on each new frame. You must override it to
-specify your own behaviors.
+### aComponent.earlyUpdate()
+Early update of this component. See `Entity` documentation for more information.
+
+**Kind**: instance method of [<code>AComponent</code>](#AComponent)  
+<a name="AComponent+lateUpdate"></a>
+
+### aComponent.lateUpdate()
+Late update of this component. See `Entity` documentation for more information.
 
 **Kind**: instance method of [<code>AComponent</code>](#AComponent)  
 <a name="AComponent+destructor"></a>
@@ -137,14 +160,16 @@ See the instance function `AComponent.identity`.
 ## ASystem
 `ASystem` mean Abstract System. You can create systems by inheriting this class.
 
-A system is a 'module' on which `ASystem.update()` will run on each `Entity.update()` call from the world entity.
+A system is a 'module' on which `ASystem.earlyUpdate()` and `ASystem.lateUpdate()` will run on each `Entity.update()`
+call from the world entity.
 It perform predictable actions on a set of entities.
 
 On inheriting ASystem, you must set a constructor which call `super()`. First argument is the parent which will be
 given to your constructor. The second argument must be specified from your constructor: it must be an array with all
 the components the system can work on.
 
-When `update(entities)` is called, first argument is an array of entities, which comply to your components requirements.
+You must implement `earlyUpdate(entities)` and/or `lateUpdate(entities)`.
+First argument is an array of entities, which comply to your components requirements.
 All entities that have all the required components will be in the given array.
 
 See examples to understand how systems work.
@@ -157,7 +182,6 @@ To create systems, you must add `SystemComponent` to your world entity.
     * [new ASystem(parent, requiredComponents)](#new_ASystem_new)
     * [.parent](#ASystem+parent) ⇒ [<code>Entity</code>](#Entity)
     * [.requiredComponents](#ASystem+requiredComponents) ⇒ [<code>Array.&lt;AComponent&gt;</code>](#AComponent)
-    * [.update(entities)](#ASystem+update)
 
 <a name="new_ASystem_new"></a>
 
@@ -184,19 +208,6 @@ to `update()`. It is an entity filter by components.
 ### aSystem.requiredComponents ⇒ [<code>Array.&lt;AComponent&gt;</code>](#AComponent)
 **Kind**: instance property of [<code>ASystem</code>](#ASystem)  
 **Returns**: [<code>Array.&lt;AComponent&gt;</code>](#AComponent) - The components which will filter entities to be given to `update()`.  
-<a name="ASystem+update"></a>
-
-### aSystem.update(entities)
-This function will be called on each `update()` call from the parent entity or an entity which own the parent.
-
-You must override this function, it represent the behaviours of your system.
-
-**Kind**: instance method of [<code>ASystem</code>](#ASystem)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| entities | [<code>Array.&lt;Entity&gt;</code>](#Entity) | All entities available in the tree which comply to the required components. |
-
 <a name="Entity"></a>
 
 ## Entity
@@ -210,6 +221,19 @@ By default, a component is empty: no behaviours, no meaning, no purpose.
 
 See `acomponents.js` or the example folder for more details about components.
 
+On updating an entity, this procedure apply:
+- Call `earlyUpdate()` on child entities (which call `earlyUpdate()` on child entities then components)
+- Call `earlyUpdate()` on entity's components
+- Call `lateUpdate()` on child entities (which call `lateUpdate()` on child entities then components)
+- Call `lateUpdate()` on entity's components
+
+It may be useful if you have a drawing system:
+- On your world, a component is drawing sprites on screen
+- Childs of your world are sprites.
+- First, sprites get `earlyUpdate()` called
+- Then, drawing system get `earlyUpdate()` called
+- Finally, sprites get `lateUpdate()` called
+
 **Kind**: global class  
 
 * [Entity](#Entity)
@@ -219,7 +243,7 @@ See `acomponents.js` or the example folder for more details about components.
         * [.parent](#Entity+parent) ⇒ [<code>Entity</code>](#Entity)
         * [.name](#Entity+name) ⇒ <code>String</code>
         * [.createChild(name, [ComponentsType])](#Entity+createChild) ⇒ [<code>Entity</code>](#Entity)
-        * [.update()](#Entity+update)
+        * [.upate()](#Entity+upate)
         * [._(name)](#Entity+_) ⇒ [<code>Entity</code>](#Entity)
         * [.getChild(name)](#Entity+getChild) ⇒ [<code>Entity</code>](#Entity)
         * [.deleteChild(name)](#Entity+deleteChild)
@@ -285,11 +309,11 @@ Create an entity which will be child of this entity.
 | name | <code>String</code> |  | Name of the child. You can later get the child using `_()` or `getChild()` functions. |
 | [ComponentsType] | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to add to the new entity. These components must be default-constructible. |
 
-<a name="Entity+update"></a>
+<a name="Entity+upate"></a>
 
-### entity.update()
-Update all childs then our own components. This will call `update()` on
-all child entities and on all components from this entity and childs.
+### entity.upate()
+Call `earlyUpdate()` then `lateUpdate()`. See documentation of Entity for more information about
+the `update()`
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 <a name="Entity+_"></a>
@@ -440,7 +464,8 @@ To create your own system, take a look a the file `asystem.js`.
 * [SystemComponent](#SystemComponent)
     * [.add(SystemType, ...args)](#SystemComponent+add)
     * [.delete(SystemType)](#SystemComponent+delete)
-    * [.update()](#SystemComponent+update)
+    * [.earlyUpdate()](#SystemComponent+earlyUpdate)
+    * [.lateUpdate()](#SystemComponent+lateUpdate)
 
 <a name="SystemComponent+add"></a>
 
@@ -469,9 +494,15 @@ Delete a system. If system is not found, an error will be thrown.
 | --- | --- | --- |
 | SystemType | [<code>ASystem</code>](#ASystem) | System to remove. |
 
-<a name="SystemComponent+update"></a>
+<a name="SystemComponent+earlyUpdate"></a>
 
-### systemComponent.update()
-Call the `update()` function on all registered systems.
+### systemComponent.earlyUpdate()
+Call `earlyUpdate()` on all registered systems.
+
+**Kind**: instance method of [<code>SystemComponent</code>](#SystemComponent)  
+<a name="SystemComponent+lateUpdate"></a>
+
+### systemComponent.lateUpdate()
+Call `lateUpdate()` on all registered systems.
 
 **Kind**: instance method of [<code>SystemComponent</code>](#SystemComponent)  

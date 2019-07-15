@@ -5,14 +5,16 @@ const { ASystemSymbol } = require('./internal/symbols');
 /**
  * `ASystem` mean Abstract System. You can create systems by inheriting this class.
  *
- * A system is a 'module' on which `ASystem.update()` will run on each `Entity.update()` call from the world entity.
+ * A system is a 'module' on which `ASystem.earlyUpdate()` and `ASystem.lateUpdate()` will run on each `Entity.update()`
+ * call from the world entity.
  * It perform predictable actions on a set of entities.
  *
  * On inheriting ASystem, you must set a constructor which call `super()`. First argument is the parent which will be
  * given to your constructor. The second argument must be specified from your constructor: it must be an array with all
  * the components the system can work on.
  *
- * When `update(entities)` is called, first argument is an array of entities, which comply to your components requirements.
+ * You must implement `earlyUpdate(entities)` and/or `lateUpdate(entities)`.
+ * First argument is an array of entities, which comply to your components requirements.
  * All entities that have all the required components will be in the given array.
  *
  * See examples to understand how systems work.
@@ -65,19 +67,6 @@ class ASystem
     get requiredComponents()
     {
         return this._requiredComponents;
-    }
-
-    /**
-     * This function will be called on each `update()` call from the parent entity or an entity which own the parent.
-     *
-     * You must override this function, it represent the behaviours of your system.
-     *
-     * @override
-     * @param {Array.<Entity>} entities All entities available in the tree which comply to the required components.
-     */
-    update(entities)
-    {
-
     }
 
     /**
