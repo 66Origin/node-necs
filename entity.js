@@ -1,5 +1,5 @@
 'use strict';
-const EventEmitter = require('events');
+const SafeEventEmitter = require('safe-event-emitter');
 const isArray = require('lodash/isArray');
 const get = require('lodash/get');
 const toPairs = require('lodash/toPairs');
@@ -32,7 +32,7 @@ const { AComponentSymbol } = require('./internal/symbols');
  * - Then, drawing system get `earlyUpdate()` called
  * - Finally, sprites get `lateUpdate()` called
  */
-class Entity extends EventEmitter
+class Entity extends SafeEventEmitter
 {
     /**
      * Create an entity which have no parent: it will represent a world. It will

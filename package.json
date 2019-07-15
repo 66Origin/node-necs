@@ -10,7 +10,8 @@
   "author": "Martin Hammerchmidt <martin.hammerchmidt@gmail.com>",
   "license": "(MIT OR Apache-2.0)",
   "dependencies": {
-    "lodash": "^4.17.14"
+    "lodash": "^4.17.14",
+    "safe-event-emitter": "github:YellowInnovation/node-safe-event-emitter"
   },
   "devDependencies": {
     "chai": "^4.2.0",
