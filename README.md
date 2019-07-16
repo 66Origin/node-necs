@@ -8,7 +8,7 @@ It take some principles from the `ECS` pattern but break some of its rules.
 
 - Entity, Components and Systems.
 - Components are not pure data, they can have 'code' and can replace systems in some cases.
-- On calling `update()` to an entity, all its childs and component will have `update()` called too.
+- On calling `update()` to an entity, all its childs and component will have `earlyUpdate()` and `lateUpdate()` called.
 - There is an entity tree: each entity can have child entities. That means there is one 'super entity' which own all
 entities from your world.
 
@@ -22,18 +22,36 @@ It is like the `GameObject` (entity) and `MonoBehaviour` (components) from Unity
 many loops could be optimized at the price of complexity.
 - Battle tested and production tested.
 - Fail-fast. Every function call is type and error checked and throw errors: no silent error that will blow somewhere sometime.
-
-**A few notes:**
-
 - We use `lodash` but do require only the functions we need and we do not use chains. It drastically lower the memory footprint.
-- Sub-classing components is supported, but you must not insert many components sharing a common super class (excepted for AComponent).
-This limitation is not strictly checked in code due to limitations from Javascript. Making components as mixins may fix the limitation.
+- Sub-classing components is supported. One limitation: you must not insert many components sharing a common super class (excepted for AComponent).
+This limitation is not strictly checked in code due to limitations from Javascript. Making components as mixins may fix the limitation on a later update.
 
 # Use cases
 
 It fits cases when you need efficient entity hierarchy for small data set, fast prototyping and easy to maintain production code.
 
-# Quick Start
+# Examples
+
+What you could easily implement:
+```javascript
+const world = Entity.createWorld();
+world.add(SystemComponent); // This entity is now able to run systems
+world.systems.add(DrawSystem); // on each `update()`, the system will draw sprites on-screen
+
+const wall = world.createChild('wall');
+wall.add(SpriteComponent, 'wall.png');
+wall.sprite.position.x = 10;
+wall.sprite.position.y = 10;
+
+const player = world.createChild('player');
+player.add(SpriteComponent, 'player.png');
+
+world.update(); // wall and player are now drawn on screen
+
+wall.sprite.visible = false;
+
+world.update(); // only player is now drawn on screen
+```
 
 - [Super simple example](examples/simple/index.js)
 - [Game of life reimplemented](examples/game_of_life/index.js)
