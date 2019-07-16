@@ -50,6 +50,23 @@ class AComponent
     }
 
     /**
+     * Emit an event from parent identified as this component.
+     *
+     * This function works as a regular EventEmitter. Only differences are:
+     * - Event will be emitted from the parent entity
+     * - Event name will be `identity:name` (ex: 'sprite:visible')
+     *
+     * So on, it is a shortcut to `this.parent.emit(this.identity + ':' + name, payload)`.
+     *
+     * @param {String} name Name of this event.
+     * @param {*} payload Optional payload to pass to the event.
+     */
+    emit(name, payload)
+    {
+        this.parent.emit(`${this.identity}:${name}`, payload);
+    }
+
+    /**
      * @returns {Entity} Owner of this component.
      */
     get parent()

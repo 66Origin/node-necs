@@ -34,6 +34,24 @@ describe('AComponent', function()
             });
         });
 
+        describe('#emit', function()
+        {
+            it('should emit the event and pass the payload', function()
+            {
+                const e = Entity.createWorld([Comp1]);
+
+                let called = false;
+                e.on('Comp1:event', function(payload)
+                {
+                    expect(payload).to.equal(42);
+                    called = true;
+                });
+
+                e.get(Comp1).emit('event', 42);
+                expect(called).to.be.true;
+            });
+        });
+
         describe('AComponent.identity', function()
         {
             it('should return null', function()
