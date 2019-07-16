@@ -1,5 +1,5 @@
 'use strict';
-const toPairs = require('lodash/toPairs');
+const toPairs = require('lodash.toPairs');
 
 const { ASystemSymbol } = require('./internal/symbols');
 const AComponent = require('./acomponent');

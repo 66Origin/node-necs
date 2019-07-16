@@ -1,8 +1,7 @@
 'use strict';
 const EventEmitter = require('events');
-const isArray = require('lodash/isArray');
-const get = require('lodash/get');
-const toPairs = require('lodash/toPairs');
+const get = require('lodash.get');
+const toPairs = require('lodash.toPairs');
 
 const AComponent = require('./acomponent');
 const ASystem = require('./asystem');
@@ -65,7 +64,7 @@ class Entity extends EventEmitter
             throw new TypeError('parent must be an Entity instance or null');
         }
 
-        if (ComponentsType !== null && !isArray(ComponentsType))
+        if (ComponentsType !== null && !Array.isArray(ComponentsType))
         {
             throw new TypeError('Components must be an Array or null');
         }
@@ -304,7 +303,7 @@ class Entity extends EventEmitter
      */
     has(ComponentsType)
     {
-        if (!isArray(ComponentsType))
+        if (!Array.isArray(ComponentsType))
         {
             throw new TypeError('ComponentsType must be an Array');
         }
@@ -364,7 +363,7 @@ class Entity extends EventEmitter
      */
     addMany(ComponentsType)
     {
-        if (!isArray(ComponentsType))
+        if (!Array.isArray(ComponentsType))
         {
             throw new TypeError('Components must be an Array');
         }
@@ -403,7 +402,7 @@ class Entity extends EventEmitter
      */
     deleteMany(ComponentsType)
     {
-        if (!isArray(ComponentsType))
+        if (!Array.isArray(ComponentsType))
         {
             throw new TypeError('Components must be an Array');
         }
