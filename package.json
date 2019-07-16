@@ -1,6 +1,6 @@
 {
   "name": "@yellowinnovation/node-necs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tiny ECS that does one job",
   "keywords": ["ecs", "unity", "entity", "simple"],
   "main": "index.js",
