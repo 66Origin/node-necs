@@ -2,6 +2,7 @@
   "name": "@yellowinnovation/node-necs",
   "version": "1.0.0",
   "description": "Tiny ECS that does one job",
+  "keywords": ["ecs", "unity", "entity", "simple"],
   "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha",
