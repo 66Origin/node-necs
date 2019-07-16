@@ -1,5 +1,5 @@
 {
-  "name": "necs",
+  "name": "@yellowinnovation/node-necs",
   "version": "1.0.0",
   "description": "Tiny ECS that does one job",
   "main": "index.js",
@@ -7,8 +7,16 @@
     "test": "nyc --reporter=html --reporter=text mocha",
     "doc": "jsdoc2md *.js > doc/doc.md"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YellowInnovation/node-necs.git"
+  },
   "author": "Martin Hammerchmidt <martin.hammerchmidt@gmail.com>",
   "license": "(MIT OR Apache-2.0)",
+  "bugs": {
+    "url": "https://github.com/YellowInnovation/node-necs/issues"
+  },
+  "homepage": "https://github.com/YellowInnovation/node-necs#readme",
   "dependencies": {
     "lodash.get": "^4.4.2",
     "lodash.topairs": "^4.3.0"
