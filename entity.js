@@ -1,7 +1,7 @@
 'use strict';
 const EventEmitter = require('events');
 const get = require('lodash.get');
-const toPairs = require('lodash.toPairs');
+const toPairs = require('lodash.topairs');
 
 const AComponent = require('./acomponent');
 const ASystem = require('./asystem');
