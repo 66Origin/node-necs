@@ -243,7 +243,7 @@ It may be useful if you have a drawing system:
         * [.parent](#Entity+parent) ⇒ [<code>Entity</code>](#Entity)
         * [.name](#Entity+name) ⇒ <code>String</code>
         * [.createChild(name, [ComponentsType])](#Entity+createChild) ⇒ [<code>Entity</code>](#Entity)
-        * [.upate()](#Entity+upate)
+        * [.update()](#Entity+update)
         * [._(name)](#Entity+_) ⇒ [<code>Entity</code>](#Entity)
         * [.getChild(name)](#Entity+getChild) ⇒ [<code>Entity</code>](#Entity)
         * [.deleteChild(name)](#Entity+deleteChild)
@@ -309,11 +309,13 @@ Create an entity which will be child of this entity.
 | name | <code>String</code> |  | Name of the child. You can later get the child using `_()` or `getChild()` functions. |
 | [ComponentsType] | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to add to the new entity. These components must be default-constructible. |
 
-<a name="Entity+upate"></a>
+<a name="Entity+update"></a>
 
-### entity.upate()
+### entity.update()
 Call `earlyUpdate()` then `lateUpdate()`. See documentation of Entity for more information about
-the `update()`
+the `update()`.
+
+You should call this function only on your world Entity.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 <a name="Entity+_"></a>
