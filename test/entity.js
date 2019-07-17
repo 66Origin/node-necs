@@ -197,6 +197,33 @@ describe('Entity', function()
             expect(parent.getChild('b')).to.equal(b);
         });
 
+        it('should delete listeners', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+
+            a.on('hello', () => {});
+            expect(a.listenerCount('hello')).to.equal(1);
+
+            parent.deleteChild('a');
+            expect(a.listenerCount('hello')).to.equal(0);
+        });
+
+        it('should delete recursively (eg. delete childs of the child)', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+            const b = a.createChild('b');
+
+            b.on('hello', () => {});
+            expect(b.listenerCount('hello')).to.equal(1);
+
+            parent.deleteChild('a');
+            expect(parent.getChild('a')).to.be.null;
+            expect(a.getChild('b')).to.be.null;
+            expect(b.listenerCount('hello')).to.equal(0);
+        });
+
         it('should throw on deleting unknown child', function()
         {
             const parent = Entity.createWorld();
@@ -230,6 +257,33 @@ describe('Entity', function()
             expect(parent.getChild('a')).to.be.null;
         });
 
+        it('should delete listeners', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+
+            a.on('hello', () => {});
+            expect(a.listenerCount('hello')).to.equal(1);
+
+            a.deleteThis();
+            expect(a.listenerCount('hello')).to.equal(0);
+        });
+
+        it('should delete recursively (eg. delete childs of the child)', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+            const b = a.createChild('b');
+
+            b.on('hello', () => {});
+            expect(b.listenerCount('hello')).to.equal(1);
+
+            a.deleteThis();
+            expect(parent.getChild('a')).to.be.null;
+            expect(a.getChild('b')).to.be.null;
+            expect(b.listenerCount('hello')).to.equal(0);
+        });
+
         it('should throw on deleting a world', function()
         {
             const parent = Entity.createWorld();
@@ -238,6 +292,47 @@ describe('Entity', function()
             {
                 parent.deleteThis();
             }).to.throw();
+        });
+    });
+
+    describe('#deleteChilds', function()
+    {
+        it('should delete every child', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+            const b = parent.createChild('b');
+
+            parent.deleteChilds();
+            expect(parent.getChild('a')).to.be.null;
+            expect(parent.getChild('b')).to.be.null;
+        });
+
+        it('should delete listeners', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+
+            a.on('hello', () => {});
+            expect(a.listenerCount('hello')).to.equal(1);
+
+            parent.deleteChilds();
+            expect(a.listenerCount('hello')).to.equal(0);
+        });
+
+        it('should delete recursively (eg. delete childs of the child)', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+            const b = a.createChild('b');
+
+            b.on('hello', () => {});
+            expect(b.listenerCount('hello')).to.equal(1);
+
+            parent.deleteChilds();
+            expect(parent.getChild('a')).to.be.null;
+            expect(a.getChild('b')).to.be.null;
+            expect(b.listenerCount('hello')).to.equal(0);
         });
     });
 });

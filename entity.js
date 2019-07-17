@@ -105,18 +105,24 @@ class Entity extends EventEmitter
     }
 
     /**
-     * This function is automatically called on destruction. It will call
-     * `destructor()` on every components. Do not use an entity after this
-     * function being called.
+     * This function is automatically called on destruction.
+     *
+     * - Call `destructor()` on every components
+     * - Remove every components
+     * - Remove every listeners
+     * - Do it recursively on every child
      *
      * @private
      */
     _destructor()
     {
+        this.removeAllListeners();
         this._components.forEach(component =>
         {
             component.destructor();
         });
+
+        this.deleteChilds();
     }
 
     /**
@@ -250,13 +256,35 @@ class Entity extends EventEmitter
         {
             throw new Error('can not delete child: not found');
         }
+
         this._childs[name]._destructor();
         delete this._childs[name];
     }
 
     /**
-     * Delete this entity. It must be have a parent, else an error will
-     * be thrown.
+     * Delete all childs:
+     *
+     * - Call `_destructor()` on each child and delete them from this entity.
+     */
+    deleteChilds()
+    {
+        toPairs(this._childs).forEach(childKeyValue =>
+        {
+            const childName = childKeyValue[0];
+            const child = childKeyValue[1];
+
+            child._destructor();
+        });
+
+        this._childs = {};
+    }
+
+    /**
+     * Delete this entity and remove all listeners from this entity.
+     *
+     * It must be have a parent, else an error will be thrown.
+     *
+     * It will also delete all childs of this entity.
      */
     deleteThis()
     {

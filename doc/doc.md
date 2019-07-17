@@ -91,6 +91,7 @@ The `update()` function is automatically called when your entity tree got its fu
     * _instance_
         * [.parent](#AComponent+parent) ⇒ [<code>Entity</code>](#Entity)
         * [.identity](#AComponent+identity) ⇒ <code>String</code>
+        * [.emit(name, payload)](#AComponent+emit)
         * [.earlyUpdate()](#AComponent+earlyUpdate)
         * [.lateUpdate()](#AComponent+lateUpdate)
         * [.destructor()](#AComponent+destructor)
@@ -122,6 +123,24 @@ component name from your class static function name.
 See static function `AComponent.identity`.
 
 **Kind**: instance property of [<code>AComponent</code>](#AComponent)  
+<a name="AComponent+emit"></a>
+
+### aComponent.emit(name, payload)
+Emit an event from parent identified as this component.
+
+This function works as a regular EventEmitter. Only differences are:
+- Event will be emitted from the parent entity
+- Event name will be `identity:name` (ex: 'sprite:visible')
+
+So on, it is a shortcut to `this.parent.emit(this.identity + ':' + name, payload)`.
+
+**Kind**: instance method of [<code>AComponent</code>](#AComponent)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>String</code> | Name of this event. |
+| payload | <code>\*</code> | Optional payload to pass to the event. |
+
 <a name="AComponent+earlyUpdate"></a>
 
 ### aComponent.earlyUpdate()
@@ -247,6 +266,7 @@ It may be useful if you have a drawing system:
         * [._(name)](#Entity+_) ⇒ [<code>Entity</code>](#Entity)
         * [.getChild(name)](#Entity+getChild) ⇒ [<code>Entity</code>](#Entity)
         * [.deleteChild(name)](#Entity+deleteChild)
+        * [.deleteChilds()](#Entity+deleteChilds)
         * [.deleteThis()](#Entity+deleteThis)
         * [.has(ComponentsType)](#Entity+has) ⇒ <code>Boolean</code>
         * [.get([ComponentType])](#Entity+get)
@@ -355,11 +375,22 @@ Delete a child. An error will be thrown if child is not found.
 | --- | --- | --- |
 | name | <code>String</code> | Child name you want to delete |
 
+<a name="Entity+deleteChilds"></a>
+
+### entity.deleteChilds()
+Delete all childs:
+
+- Call `_destructor()` on each child and delete them from this entity.
+
+**Kind**: instance method of [<code>Entity</code>](#Entity)  
 <a name="Entity+deleteThis"></a>
 
 ### entity.deleteThis()
-Delete this entity. It must be have a parent, else an error will
-be thrown.
+Delete this entity and remove all listeners from this entity.
+
+It must be have a parent, else an error will be thrown.
+
+It will also delete all childs of this entity.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 <a name="Entity+has"></a>
