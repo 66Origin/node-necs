@@ -91,7 +91,7 @@ The `update()` function is automatically called when your entity tree got its fu
     * _instance_
         * [.parent](#AComponent+parent) ⇒ [<code>Entity</code>](#Entity)
         * [.identity](#AComponent+identity) ⇒ <code>String</code>
-        * [.emit(name, payload)](#AComponent+emit)
+        * [.emit(name, [payload])](#AComponent+emit)
         * [.earlyUpdate()](#AComponent+earlyUpdate)
         * [.lateUpdate()](#AComponent+lateUpdate)
         * [.destructor()](#AComponent+destructor)
@@ -125,7 +125,7 @@ See static function `AComponent.identity`.
 **Kind**: instance property of [<code>AComponent</code>](#AComponent)  
 <a name="AComponent+emit"></a>
 
-### aComponent.emit(name, payload)
+### aComponent.emit(name, [payload])
 Emit an event from parent identified as this component.
 
 This function works as a regular EventEmitter. Only differences are:
@@ -136,10 +136,10 @@ So on, it is a shortcut to `this.parent.emit(this.identity + ':' + name, payload
 
 **Kind**: instance method of [<code>AComponent</code>](#AComponent)  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>String</code> | Name of this event. |
-| payload | <code>\*</code> | Optional payload to pass to the event. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| name | <code>String</code> |  | Name of this event. |
+| [payload] | <code>\*</code> | <code></code> | Optional payload to pass to the event. |
 
 <a name="AComponent+earlyUpdate"></a>
 
@@ -270,10 +270,10 @@ It may be useful if you have a drawing system:
         * [.deleteThis()](#Entity+deleteThis)
         * [.has(ComponentsType)](#Entity+has) ⇒ <code>Boolean</code>
         * [.get([ComponentType])](#Entity+get)
-        * [.add(ComponentType, ...args)](#Entity+add)
-        * [.addMany(ComponentsType)](#Entity+addMany)
-        * [.delete(ComponentType)](#Entity+delete)
-        * [.deleteMany(ComponentsType)](#Entity+deleteMany)
+        * [.add(ComponentType, ...args)](#Entity+add) ⇒ [<code>Entity</code>](#Entity)
+        * [.addMany(ComponentsType)](#Entity+addMany) ⇒ [<code>Entity</code>](#Entity)
+        * [.delete(ComponentType)](#Entity+delete) ⇒ [<code>Entity</code>](#Entity)
+        * [.deleteMany(ComponentsType)](#Entity+deleteMany) ⇒ [<code>Entity</code>](#Entity)
     * _static_
         * [.createWorld([ComponentsType])](#Entity.createWorld) ⇒ [<code>Entity</code>](#Entity)
 
@@ -323,6 +323,7 @@ Get the name of this entity. All entities have a name excepted world entities wh
 Create an entity which will be child of this entity.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
+**Returns**: [<code>Entity</code>](#Entity) - the created entity  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -425,10 +426,11 @@ If you pass a super class of your component, it will return it.
 
 <a name="Entity+add"></a>
 
-### entity.add(ComponentType, ...args)
+### entity.add(ComponentType, ...args) ⇒ [<code>Entity</code>](#Entity)
 Add a component to this entity.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
+**Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -437,10 +439,11 @@ Add a component to this entity.
 
 <a name="Entity+addMany"></a>
 
-### entity.addMany(ComponentsType)
+### entity.addMany(ComponentsType) ⇒ [<code>Entity</code>](#Entity)
 Add many components to this entity. Each component must be default-constructible.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
+**Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -448,11 +451,12 @@ Add many components to this entity. Each component must be default-constructible
 
 <a name="Entity+delete"></a>
 
-### entity.delete(ComponentType)
+### entity.delete(ComponentType) ⇒ [<code>Entity</code>](#Entity)
 Delete a specific component from this entity. If the Component is not
 found, an error will be thrown.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
+**Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -460,11 +464,12 @@ found, an error will be thrown.
 
 <a name="Entity+deleteMany"></a>
 
-### entity.deleteMany(ComponentsType)
+### entity.deleteMany(ComponentsType) ⇒ [<code>Entity</code>](#Entity)
 Delete specific components from this entity. If a component is not found,
 an error will be thrown.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
+**Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
 
 | Param | Type | Description |
 | --- | --- | --- |

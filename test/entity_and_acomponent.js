@@ -233,6 +233,12 @@ describe('Integration between Entity and AComponent', function()
             expect(e.position.y).equal(20);
         });
 
+        it('should return this', function()
+        {
+            const e = Entity.createWorld();
+            expect(e.add(SpriteComponent)).to.equal(e);
+        });
+
         it('should throw on missing static name property on component', function()
         {
             const e = Entity.createWorld();
@@ -297,6 +303,12 @@ describe('Integration between Entity and AComponent', function()
             const e = Entity.createWorld();
             e.addMany([VelocityComponent]);
             expect(e.velocity.velocity).to.equal(0);
+        });
+
+        it('should return this', function()
+        {
+            const e = Entity.createWorld();
+            expect(e.addMany([SpriteComponent])).to.equal(e);
         });
 
         it('should throw on passing not an array', function()
@@ -486,6 +498,13 @@ describe('Integration between Entity and AComponent', function()
             expect(e.has([DrawableComponent])).to.be.false;
         });
 
+        it('should return this', function()
+        {
+            const e = Entity.createWorld();
+            e.add(SpriteComponent);
+            expect(e.delete(SpriteComponent)).to.equal(e);
+        });
+
         it('should throw if component is not availble', function()
         {
             const e = Entity.createWorld();
@@ -564,6 +583,13 @@ describe('Integration between Entity and AComponent', function()
             expect(e.has([DrawableComponent])).to.be.true;
             e.deleteMany([DrawableComponent]);
             expect(e.has([DrawableComponent])).to.be.false;
+        });
+
+        it('should return this', function()
+        {
+            const e = Entity.createWorld();
+            e.add(SpriteComponent);
+            expect(e.deleteMany([SpriteComponent])).to.equal(e);
         });
 
         it('should throw on passing non-array', function()

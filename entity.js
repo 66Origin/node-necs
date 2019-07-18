@@ -130,7 +130,7 @@ class Entity extends EventEmitter
      * 
      * @param {String} name Name of the child. You can later get the child using `_()` or `getChild()` functions.
      * @param {Array.<AComponent>=} ComponentsType Components to add to the new entity. These components must be default-constructible.
-     * @return {Entity}
+     * @return {Entity} the created entity
      */
     createChild(name, ComponentsType = null)
     {
@@ -368,6 +368,7 @@ class Entity extends EventEmitter
      * 
      * @param {AComponent} ComponentType The type of the component to add
      * @param  {...any} args Arguments to pass to the component constructor
+     * @return {Entity} this entity (useful for chaining)
      */
     add(ComponentType, ...args)
     {
@@ -383,11 +384,13 @@ class Entity extends EventEmitter
 
         this._components.push(component);
         this[component.identity] = component;
+        return this;
     }
 
     /**
      * Add many components to this entity. Each component must be default-constructible.
      * @param {Array.<AComponent>} ComponentsType Types of the components to add
+     * @return {Entity} this entity (useful for chaining)
      */
     addMany(ComponentsType)
     {
@@ -400,6 +403,8 @@ class Entity extends EventEmitter
         {
             this.add(ComponentType);
         });
+
+        return this;
     }
 
     /**
@@ -407,6 +412,7 @@ class Entity extends EventEmitter
      * found, an error will be thrown.
      * 
      * @param {AComponent} ComponentType Type of the component to delete
+     * @return {Entity} this entity (useful for chaining)
      */
     delete(ComponentType)
     {
@@ -421,12 +427,14 @@ class Entity extends EventEmitter
         this._components[componentIndex].destructor();
         delete this[ComponentType.identity];
         this._components.splice(componentIndex, 1);
+        return this;
     }
 
     /**
      * Delete specific components from this entity. If a component is not found,
      * an error will be thrown.
      * @param {Array.<AComponent>} ComponentsType Type of the components to delete
+     * @return {Entity} this entity (useful for chaining)
      */
     deleteMany(ComponentsType)
     {
@@ -436,6 +444,7 @@ class Entity extends EventEmitter
         }
 
         ComponentsType.forEach(el => this.delete(el));
+        return this;
     }
 
     /**

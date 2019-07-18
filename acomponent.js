@@ -59,9 +59,9 @@ class AComponent
      * So on, it is a shortcut to `this.parent.emit(this.identity + ':' + name, payload)`.
      *
      * @param {String} name Name of this event.
-     * @param {*} payload Optional payload to pass to the event.
+     * @param {*} [payload] Optional payload to pass to the event.
      */
-    emit(name, payload)
+    emit(name, payload = null)
     {
         this.parent.emit(`${this.identity}:${name}`, payload);
     }
