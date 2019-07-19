@@ -435,7 +435,7 @@ Add a component to this entity.
 | Param | Type | Description |
 | --- | --- | --- |
 | ComponentType | [<code>AComponent</code>](#AComponent) | The type of the component to add |
-| ...args | <code>any</code> | Arguments to pass to the component constructor |
+| ...args | <code>\*</code> | Arguments to pass to the component constructor |
 
 <a name="Entity+addMany"></a>
 

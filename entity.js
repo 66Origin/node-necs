@@ -367,7 +367,7 @@ class Entity extends EventEmitter
      * Add a component to this entity.
      * 
      * @param {AComponent} ComponentType The type of the component to add
-     * @param  {...any} args Arguments to pass to the component constructor
+     * @param  {...*} args Arguments to pass to the component constructor
      * @return {Entity} this entity (useful for chaining)
      */
     add(ComponentType, ...args)
