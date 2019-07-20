@@ -692,5 +692,29 @@ describe('Integration between Entity and AComponent', function()
             expect(updateEarlyCount).to.equal(3);
             expect(updateLateCount).to.equal(3);
         });
+
+        it('should emit events on update steps', function()
+        {
+            const e = Entity.createWorld();
+
+            let earlyCalled = false;
+            let lateCalled = false;
+
+            e.on('nextEarlyUpdate', () =>
+            {
+                expect(lateCalled).to.be.false;
+                earlyCalled = true;
+            });
+
+            e.on('nextLateUpdate', () =>
+            {
+                expect(earlyCalled).to.be.true;
+                lateCalled = true;
+            });
+            
+            e.update();
+            expect(earlyCalled).to.be.true;
+            expect(lateCalled).to.be.true;
+        });
     });
 });

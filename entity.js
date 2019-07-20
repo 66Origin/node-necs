@@ -15,14 +15,16 @@ const { AComponentSymbol } = require('./internal/symbols');
  * - You can create and attach components. As an example, you can create an entity named
  * `wall` which have the following components: `Position`, `Hitbox`, `Sprite`.
  * - You can create child entities.
- * 
- * See `acomponents.js` or the example folder for more details about components.
  *
  * On updating an entity, this procedure apply:
+ * - Emit `nextEarlyUpdate`
  * - Call `earlyUpdate()` on child entities (which call `earlyUpdate()` on child entities then components)
  * - Call `earlyUpdate()` on entity's components
+ * - Emit `nextLateUpdate`
  * - Call `lateUpdate()` on child entities (which call `lateUpdate()` on child entities then components)
  * - Call `lateUpdate()` on entity's components
+ *
+ * `nextEarlyUpdate` and `nextLateUpdate` may be useful if you do something `now` and you want to do something at `now+1`.
  *
  * It may be useful if you have a drawing system:
  * - On your world, a component is drawing sprites on screen
@@ -151,11 +153,15 @@ class Entity extends EventEmitter
     }
 
     /**
-     * Call `earlyUpdate()` on childs then this entity own components.
+     * - Emit 'nextEarlyUpdate`
+     * - Call `earlyUpdate()` on childs
+     * - Call `earlyUpdate` on components.
      * @private
      */
     _earlyUpdate()
     {
+        this.emit('nextEarlyUpdate');
+
         toPairs(this._childs).forEach(child =>
         {
             child[1]._earlyUpdate();
@@ -168,11 +174,15 @@ class Entity extends EventEmitter
     }
 
     /**
-     * Call `lateUpdate()` on childs then this entity own components.
+     * - Emit `nextLateUpdate`
+     * - Call `lateUpdate()` on childs
+     * - Call `lateUpdate()` on components.
      * @private
      */
     _lateUpdate()
     {
+        this.emit('nextLateUpdate');
+
         toPairs(this._childs).forEach(child =>
         {
             child[1]._lateUpdate();
