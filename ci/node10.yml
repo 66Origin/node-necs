@@ -1,0 +1,18 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: node
+    tag: 10-alpine
+
+inputs:
+  - name: sources-node-necs
+
+run:
+  path: sh
+  args:
+    - -c
+    - npm install && npm run test
+  dir: sources-node-necs
