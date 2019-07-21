@@ -24,6 +24,9 @@ const { AComponentSymbol } = require('./internal/symbols');
  * - Call `lateUpdate()` on child entities (which call `lateUpdate()` on child entities then components)
  * - Call `lateUpdate()` on entity's components
  *
+ * On adding components to an entity, the order they are added matter: first added, first to be updated. Last added,
+ * last to be updated.
+ *
  * `nextEarlyUpdate` and `nextLateUpdate` may be useful if you do something `now` and you want to do something at `now+1`.
  *
  * It may be useful if you have a drawing system:
@@ -374,7 +377,7 @@ class Entity extends EventEmitter
     }
 
     /**
-     * Add a component to this entity.
+     * Add a component to this entity on last position.
      * 
      * @param {AComponent} ComponentType The type of the component to add
      * @param  {...*} args Arguments to pass to the component constructor
@@ -398,7 +401,10 @@ class Entity extends EventEmitter
     }
 
     /**
-     * Add many components to this entity. Each component must be default-constructible.
+     * Add many components to this entity in the same order they are given at last position.
+     *
+     * Each component must be default-constructible.
+     *
      * @param {Array.<AComponent>} ComponentsType Types of the components to add
      * @return {Entity} this entity (useful for chaining)
      */

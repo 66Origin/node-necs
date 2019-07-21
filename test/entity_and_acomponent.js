@@ -675,7 +675,7 @@ describe('Integration between Entity and AComponent', function()
                 {
                     return 'updater';
                 }
-            };
+            }
 
             const e = Entity.createWorld();
             const child1 = e.createChild('1', [UpdateComponent]);
@@ -711,10 +711,108 @@ describe('Integration between Entity and AComponent', function()
                 expect(earlyCalled).to.be.true;
                 lateCalled = true;
             });
-            
+
             e.update();
             expect(earlyCalled).to.be.true;
             expect(lateCalled).to.be.true;
+        });
+
+        it('should call update through components the same order components are added', function()
+        {
+            let count = 0;
+
+            class c1Component extends AComponent
+            {
+                earlyUpdate()
+                {
+                    expect(count).to.equal(0);
+                    ++count;
+                }
+
+                lateUpdate()
+                {
+                    expect(count).to.equal(3);
+                    ++count;
+                }
+
+                get identity()
+                {
+                    return c1Component.identity;
+                }
+
+                static get identity()
+                {
+                    return 'c1';
+                }
+            }
+
+            class c2Component extends AComponent
+            {
+                earlyUpdate()
+                {
+                    expect(count).to.equal(1);
+                    ++count;
+                }
+
+                lateUpdate()
+                {
+                    expect(count).to.equal(4);
+                    ++count;
+                }
+
+                get identity()
+                {
+                    return c2Component.identity;
+                }
+
+                static get identity()
+                {
+                    return 'c2';
+                }
+            }
+
+            class c3Component extends AComponent
+            {
+                earlyUpdate()
+                {
+                    expect(count).to.equal(2);
+                    ++count;
+                }
+
+                lateUpdate()
+                {
+                    expect(count).to.equal(5);
+                    ++count;
+                }
+
+                get identity()
+                {
+                    return c3Component.identity;
+                }
+
+                static get identity()
+                {
+                    return 'c3';
+                }
+            }
+
+            const e1 = Entity.createWorld();
+            e1.addMany([c1Component, c2Component, c3Component]);
+
+            expect(count).to.equal(0);
+            e1.update();
+            expect(count).to.equal(6);
+
+            count = 0;
+            const e2 = Entity.createWorld();
+
+            e2.add(c1Component);
+            e2.add(c2Component);
+            e2.add(c3Component);
+
+            expect(count).to.equal(0);
+            e2.update();
+            expect(count).to.equal(6);
         });
     });
 });

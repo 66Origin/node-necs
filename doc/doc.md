@@ -38,14 +38,18 @@ All entities that have all the required components will be in the given array.</
 <code>wall</code> which have the following components: <code>Position</code>, <code>Hitbox</code>, <code>Sprite</code>.</li>
 <li>You can create child entities.</li>
 </ul>
-<p>See <code>acomponents.js</code> or the example folder for more details about components.</p>
 <p>On updating an entity, this procedure apply:</p>
 <ul>
+<li>Emit <code>nextEarlyUpdate</code></li>
 <li>Call <code>earlyUpdate()</code> on child entities (which call <code>earlyUpdate()</code> on child entities then components)</li>
 <li>Call <code>earlyUpdate()</code> on entity&#39;s components</li>
+<li>Emit <code>nextLateUpdate</code></li>
 <li>Call <code>lateUpdate()</code> on child entities (which call <code>lateUpdate()</code> on child entities then components)</li>
 <li>Call <code>lateUpdate()</code> on entity&#39;s components</li>
 </ul>
+<p>On adding components to an entity, the order they are added matter: first added, first to be updated. Last added,
+last to be updated.</p>
+<p><code>nextEarlyUpdate</code> and <code>nextLateUpdate</code> may be useful if you do something <code>now</code> and you want to do something at <code>now+1</code>.</p>
 <p>It may be useful if you have a drawing system:</p>
 <ul>
 <li>On your world, a component is drawing sprites on screen</li>
@@ -238,13 +242,18 @@ By default, a component is empty: no behaviours, no meaning, no purpose.
 `wall` which have the following components: `Position`, `Hitbox`, `Sprite`.
 - You can create child entities.
 
-See `acomponents.js` or the example folder for more details about components.
-
 On updating an entity, this procedure apply:
+- Emit `nextEarlyUpdate`
 - Call `earlyUpdate()` on child entities (which call `earlyUpdate()` on child entities then components)
 - Call `earlyUpdate()` on entity's components
+- Emit `nextLateUpdate`
 - Call `lateUpdate()` on child entities (which call `lateUpdate()` on child entities then components)
 - Call `lateUpdate()` on entity's components
+
+On adding components to an entity, the order they are added matter: first added, first to be updated. Last added,
+last to be updated.
+
+`nextEarlyUpdate` and `nextLateUpdate` may be useful if you do something `now` and you want to do something at `now+1`.
 
 It may be useful if you have a drawing system:
 - On your world, a component is drawing sprites on screen
@@ -427,7 +436,7 @@ If you pass a super class of your component, it will return it.
 <a name="Entity+add"></a>
 
 ### entity.add(ComponentType, ...args) ⇒ [<code>Entity</code>](#Entity)
-Add a component to this entity.
+Add a component to this entity on last position.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 **Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
@@ -440,7 +449,9 @@ Add a component to this entity.
 <a name="Entity+addMany"></a>
 
 ### entity.addMany(ComponentsType) ⇒ [<code>Entity</code>](#Entity)
-Add many components to this entity. Each component must be default-constructible.
+Add many components to this entity in the same order they are given at last position.
+
+Each component must be default-constructible.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 **Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
