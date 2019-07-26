@@ -87,6 +87,36 @@ describe('Entity', function()
             }).to.throw();
         });
 
+        it('should throw if name have points in it', function()
+        {
+            const e = Entity.createWorld();
+
+            expect(() =>
+            {
+                e.createChild('hello.hello');
+            }).to.throw();
+        });
+
+        it('should throw if name have points in it', function()
+        {
+            const e = Entity.createWorld();
+
+            expect(() =>
+            {
+                e.createChild('.hello');
+            }).to.throw();
+        });
+
+        it('should throw if name have points in it', function()
+        {
+            const e = Entity.createWorld();
+
+            expect(() =>
+            {
+                e.createChild('hello.');
+            }).to.throw();
+        });
+
         it('should have properly set _childs and parent', function()
         {
             const parent = Entity.createWorld();
@@ -122,7 +152,26 @@ describe('Entity', function()
             expect(parent.getChild('b')).to.equal(parent._('b'));
         });
 
-        it('should return null on not found', function()
+        it('should return the child', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+            const b = a.createChild('b');
+
+            expect(parent._('a.b')).to.equal(b);
+        });
+
+        it('should return the child', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+            const b = a.createChild('b');
+            const c = b.createChild('c');
+
+            expect(parent._('a.b.c')).to.equal(c);
+        });
+
+        it('should return null if not found', function()
         {
             const parent = Entity.createWorld();
             const a = parent.createChild('a');
@@ -132,12 +181,94 @@ describe('Entity', function()
             expect(parent.getChild('c')).to.equal(parent._('c'));
         });
 
+        it('should return null if not found', function()
+        {
+            const parent = Entity.createWorld();
+
+            expect(parent.getChild('c')).to.be.null;
+        });
+
+        it('should return null if not found', function()
+        {
+            const parent = Entity.createWorld();
+
+            expect(parent.getChild('a.a')).to.be.null;
+        });
+
+        it('should return null if not found', function()
+        {
+            const parent = Entity.createWorld();
+
+            expect(parent.getChild('a.a.a')).to.be.null;
+        });
+
+        it('should return null if not found', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+
+            expect(parent.getChild('a.a')).to.be.null;
+        });
+
+        it('should return null if not found', function()
+        {
+            const parent = Entity.createWorld();
+            const a = parent.createChild('a');
+
+            expect(parent.getChild('a.a.a')).to.be.null;
+        });
+
         it('should throw if name is not a string', function()
         {
             const parent = Entity.createWorld();
             expect(() =>
             {
                 parent._(42);
+            }).to.throw();
+        });
+
+        it('should throw an error if name is empty', function()
+        {
+            const e = Entity.createWorld();
+            expect(() =>
+            {
+                e.getChild('');
+            }).to.throw();
+        });
+
+        it('should throw an error if parts delimited by points are empty', function()
+        {
+            const e = Entity.createWorld();
+            expect(() =>
+            {
+                e.getChild('hello.');
+            }).to.throw();
+        });
+
+        it('should throw an error if parts delimited by points are empty', function()
+        {
+            const e = Entity.createWorld();
+            expect(() =>
+            {
+                e.getChild('.hello');
+            }).to.throw();
+        });
+
+        it('should throw an error if parts delimited by points are empty', function()
+        {
+            const e = Entity.createWorld();
+            expect(() =>
+            {
+                e.getChild('...hello');
+            }).to.throw();
+        });
+
+        it('should throw an error if parts delimited by points are empty', function()
+        {
+            const e = Entity.createWorld();
+            expect(() =>
+            {
+                e.getChild('hel..lo');
             }).to.throw();
         });
     });

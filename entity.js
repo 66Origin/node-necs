@@ -132,6 +132,8 @@ class Entity extends EventEmitter
 
     /**
      * Create an entity which will be child of this entity.
+     *
+     * `name` must not contain points `.` : they are used as delemiter to get child of child.
      * 
      * @param {String} name Name of the child. You can later get the child using `_()` or `getChild()` functions.
      * @param {Array.<AComponent>=} ComponentsType Components to add to the new entity. These components must be default-constructible.
@@ -142,6 +144,10 @@ class Entity extends EventEmitter
         if (typeof name !== 'string')
         {
             throw new TypeError('name must be a string');
+        }
+        if (name.indexOf('.') !== -1)
+        {
+            throw new TypeError('name must not contains points.');
         }
 
         if (this._childs[name])
@@ -212,7 +218,7 @@ class Entity extends EventEmitter
     /**
      * Get a child of this entity.
      * 
-     * This function is just an alias for quick-access of `getChild(name)`.
+     * This function is just an alias for quick-access of `getChild(name)`. See that function for more documentation.
      * 
      * @param {String} name Child name you want to get
      * @return {?Entity} The child or null if it does not exist.
@@ -224,7 +230,10 @@ class Entity extends EventEmitter
 
     /**
      * Get a child of this entity.
-     * 
+     *
+     * You can get childs recursively by using points `.` as delimiter in your name. Example: `world.getChild('player.body.arm')`
+     * will retrieve `arm` entity which is a child of `body` entity which is a child of `player` entity which is a child of `world`.
+     *
      * @param {String} name Child name you want to get
      * @return {?Entity} The child or null if it does not exist.
      */
@@ -235,7 +244,23 @@ class Entity extends EventEmitter
             throw new TypeError('name should be a string');
         }
 
-        return get(this._childs, name, null);
+        const childsNames = name.split('.');
+
+        const child = childsNames.reduce((acc, childName) =>
+        {
+            if (childName.length === 0)
+            {
+                throw new Error('name or its parts delimited by points must not be empty');
+            }
+
+            if (!acc)
+            {
+                return null;
+            }
+            return get(acc._childs, childName, null);
+        }, this);
+
+        return child;
     }
 
     /**
