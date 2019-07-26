@@ -331,6 +331,8 @@ Get the name of this entity. All entities have a name excepted world entities wh
 ### entity.createChild(name, [ComponentsType]) ⇒ [<code>Entity</code>](#Entity)
 Create an entity which will be child of this entity.
 
+`name` must not contain points `.` : they are used as delemiter to get child of child.
+
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 **Returns**: [<code>Entity</code>](#Entity) - the created entity  
 
@@ -353,7 +355,7 @@ You should call this function only on your world Entity.
 ### entity.\_(name) ⇒ [<code>Entity</code>](#Entity)
 Get a child of this entity.
 
-This function is just an alias for quick-access of `getChild(name)`.
+This function is just an alias for quick-access of `getChild(name)`. See that function for more documentation.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 **Returns**: [<code>Entity</code>](#Entity) - The child or null if it does not exist.  
@@ -366,6 +368,9 @@ This function is just an alias for quick-access of `getChild(name)`.
 
 ### entity.getChild(name) ⇒ [<code>Entity</code>](#Entity)
 Get a child of this entity.
+
+You can get childs recursively by using points `.` as delimiter in your name. Example: `world.getChild('player.body.arm')`
+will retrieve `arm` entity which is a child of `body` entity which is a child of `player` entity which is a child of `world`.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 **Returns**: [<code>Entity</code>](#Entity) - The child or null if it does not exist.  
