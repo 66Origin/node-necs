@@ -14,5 +14,5 @@ run:
   path: sh
   args:
     - -c
-    - npm install && npm run test
+    - npm ci && npm run test
   dir: sources-node-necs
