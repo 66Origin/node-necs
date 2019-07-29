@@ -418,6 +418,16 @@ describe('Integration between Entity and AComponent', function()
             expect(child.has([VelocityComponent, PositionComponent2, DrawableComponent, SpriteComponent])).to.be.false;
             expect(child.has([VelocityComponent])).to.be.false;
         });
+
+        it('should crash if checking presence of AComposent as it is always true', function()
+        {
+            const e = Entity.createWorld();
+
+            expect(() =>
+            {
+                e.has([AComponent]);
+            }).to.throw();
+        });
     });
 
     describe('Entity.get', function()
@@ -457,6 +467,15 @@ describe('Integration between Entity and AComponent', function()
             expect(e.get(DrawableComponent)).to.equal(e.sprite);
         });
 
+        it('should throw if pass AComponent as it is a global super class', function()
+        {
+            const e = Entity.createWorld();
+
+            expect(() =>
+            {
+                e.get(AComponent);
+            }).to.throw();
+        });
     });
 
     describe('Entity.delete', function()
@@ -505,7 +524,7 @@ describe('Integration between Entity and AComponent', function()
             expect(e.delete(SpriteComponent)).to.equal(e);
         });
 
-        it('should throw if component is not availble', function()
+        it('should throw if component is not available', function()
         {
             const e = Entity.createWorld();
 
@@ -524,6 +543,16 @@ describe('Integration between Entity and AComponent', function()
             expect(() =>
             {
                 e.delete(PositionComponent);
+            }).to.throw();
+        });
+
+        it('should throw if pass AComponent as it is a global super class', function()
+        {
+            const e = Entity.createWorld();
+
+            expect(() =>
+            {
+                e.delete(AComponent);
             }).to.throw();
         });
     });
@@ -607,6 +636,16 @@ describe('Integration between Entity and AComponent', function()
             expect(() =>
             {
                 e.deleteMany([42]);
+            }).to.throw();
+        });
+
+        it('should throw if pass AComponent as it is a global super class', function()
+        {
+            const e = Entity.createWorld();
+
+            expect(() =>
+            {
+                e.deleteMany([AComponent]);
             }).to.throw();
         });
     });

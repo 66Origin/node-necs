@@ -9,7 +9,7 @@ class Comp1 extends AComponent
 {
     get identity()
     {
-        return Comp1.name;
+        return Comp1.identity;
     }
 
     static get identity()
