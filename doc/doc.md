@@ -270,11 +270,12 @@ It may be useful if you have a drawing system:
         * [.childs](#Entity+childs) ⇒ <code>Object</code>
         * [.parent](#Entity+parent) ⇒ [<code>Entity</code>](#Entity)
         * [.name](#Entity+name) ⇒ <code>String</code>
-        * [.createChild(name, [ComponentsType])](#Entity+createChild) ⇒ [<code>Entity</code>](#Entity)
         * [.update()](#Entity+update)
         * [._(name)](#Entity+_) ⇒ [<code>Entity</code>](#Entity)
         * [.getChild(name)](#Entity+getChild) ⇒ [<code>Entity</code>](#Entity)
+        * [.createChild(name, [ComponentsType])](#Entity+createChild) ⇒ [<code>Entity</code>](#Entity)
         * [.deleteChild(name)](#Entity+deleteChild)
+        * [.deleteChildIfExist(name)](#Entity+deleteChildIfExist)
         * [.deleteChilds()](#Entity+deleteChilds)
         * [.deleteThis()](#Entity+deleteThis)
         * [.has(ComponentsType)](#Entity+has) ⇒ <code>Boolean</code>
@@ -326,21 +327,6 @@ Get the name of this entity. All entities have a name excepted world entities wh
 
 **Kind**: instance property of [<code>Entity</code>](#Entity)  
 **Returns**: <code>String</code> - Name of this entity  
-<a name="Entity+createChild"></a>
-
-### entity.createChild(name, [ComponentsType]) ⇒ [<code>Entity</code>](#Entity)
-Create an entity which will be child of this entity.
-
-`name` must not contain points `.` : they are used as delemiter to get child of child.
-
-**Kind**: instance method of [<code>Entity</code>](#Entity)  
-**Returns**: [<code>Entity</code>](#Entity) - the created entity  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| name | <code>String</code> |  | Name of the child. You can later get the child using `_()` or `getChild()` functions. |
-| [ComponentsType] | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to add to the new entity. These components must be default-constructible. |
-
 <a name="Entity+update"></a>
 
 ### entity.update()
@@ -379,10 +365,37 @@ will retrieve `arm` entity which is a child of `body` entity which is a child of
 | --- | --- | --- |
 | name | <code>String</code> | Child name you want to get |
 
+<a name="Entity+createChild"></a>
+
+### entity.createChild(name, [ComponentsType]) ⇒ [<code>Entity</code>](#Entity)
+Create an entity which will be child of this entity.
+
+`name` must not contain points `.` : they are used as delemiter to get child of child.
+
+**Kind**: instance method of [<code>Entity</code>](#Entity)  
+**Returns**: [<code>Entity</code>](#Entity) - the created entity  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| name | <code>String</code> |  | Name of the child. You can later get the child using `_()` or `getChild()` functions. |
+| [ComponentsType] | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | <code></code> | Components to add to the new entity. These components must be default-constructible. |
+
 <a name="Entity+deleteChild"></a>
 
 ### entity.deleteChild(name)
 Delete a child. An error will be thrown if child is not found.
+
+**Kind**: instance method of [<code>Entity</code>](#Entity)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>String</code> | Child name you want to delete |
+
+<a name="Entity+deleteChildIfExist"></a>
+
+### entity.deleteChildIfExist(name)
+Delete a child if it exist. Does the same thing as `deleteChild` except it won't throw if the child does not
+exist.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 
