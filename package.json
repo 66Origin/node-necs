@@ -1,8 +1,13 @@
 {
   "name": "@yellowinnovation/node-necs",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Tiny ECS that does one job",
-  "keywords": ["ecs", "unity", "entity", "simple"],
+  "keywords": [
+    "ecs",
+    "unity",
+    "entity",
+    "simple"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=html --reporter=text mocha",
@@ -25,7 +30,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "jsdoc-to-markdown": "^5.0.0",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.0",
     "nyc": "^14.1.1"
   }
 }
