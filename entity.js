@@ -131,37 +131,6 @@ class Entity extends EventEmitter
     }
 
     /**
-     * Create an entity which will be child of this entity.
-     *
-     * `name` must not contain points `.` : they are used as delemiter to get child of child.
-     * 
-     * @param {String} name Name of the child. You can later get the child using `_()` or `getChild()` functions.
-     * @param {Array.<AComponent>=} ComponentsType Components to add to the new entity. These components must be default-constructible.
-     * @return {Entity} the created entity
-     */
-    createChild(name, ComponentsType = null)
-    {
-        if (typeof name !== 'string')
-        {
-            throw new TypeError('name must be a string');
-        }
-        if (name.indexOf('.') !== -1)
-        {
-            throw new TypeError('name must not contains points.');
-        }
-
-        if (this._childs[name])
-        {
-            throw new Error('This child already exist');
-        }
-
-        const e = new Entity(this, ComponentsType);
-        e._name = name;
-        this._childs[name] = e;
-        return e;
-    }
-
-    /**
      * - Emit 'nextEarlyUpdate`
      * - Call `earlyUpdate()` on childs
      * - Call `earlyUpdate` on components.
@@ -279,6 +248,37 @@ class Entity extends EventEmitter
     }
 
     /**
+     * Create an entity which will be child of this entity.
+     *
+     * `name` must not contain points `.` : they are used as delemiter to get child of child.
+     *
+     * @param {String} name Name of the child. You can later get the child using `_()` or `getChild()` functions.
+     * @param {Array.<AComponent>=} ComponentsType Components to add to the new entity. These components must be default-constructible.
+     * @return {Entity} the created entity
+     */
+    createChild(name, ComponentsType = null)
+    {
+        if (typeof name !== 'string')
+        {
+            throw new TypeError('name must be a string');
+        }
+        if (name.indexOf('.') !== -1)
+        {
+            throw new TypeError('name must not contains points.');
+        }
+
+        if (this._childs[name])
+        {
+            throw new Error('This child already exist');
+        }
+
+        const e = new Entity(this, ComponentsType);
+        e._name = name;
+        this._childs[name] = e;
+        return e;
+    }
+
+    /**
      * Delete a child. An error will be thrown if child is not found.
      * 
      * @param {String} name Child name you want to delete
@@ -297,6 +297,20 @@ class Entity extends EventEmitter
 
         this._childs[name]._destructor();
         delete this._childs[name];
+    }
+
+    /**
+     * Delete a child if it exist. Does the same thing as `deleteChild` except it won't throw if the child does not
+     * exist.
+     *
+     * @param {String} name Child name you want to delete
+     */
+    deleteChildIfExist(name)
+    {
+        if (this.getChild(name))
+        {
+            this.deleteChild(name);
+        }
     }
 
     /**
