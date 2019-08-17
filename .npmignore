@@ -1,0 +1,9 @@
+.travis.yml
+.github
+ci
+test
+examples
+node_modules
+.idea
+.nyc_output
+coverage
