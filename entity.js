@@ -486,8 +486,25 @@ class Entity extends EventEmitter
     }
 
     /**
+     * Delete a specific component from this entity. If the Component is not
+     * found, no error will be thrown.
+     *
+     * @param {AComponent} ComponentType Type of the component to delete
+     * @return {Entity} this entity (useful for chaining)
+     */
+    deleteIfExist(ComponentType)
+    {
+        if (this.has([ComponentType]))
+        {
+            return this.delete(ComponentType);
+        }
+        return this;
+    }
+
+    /**
      * Delete specific components from this entity. If a component is not found,
      * an error will be thrown.
+     *
      * @param {Array.<AComponent>} ComponentsType Type of the components to delete
      * @return {Entity} this entity (useful for chaining)
      */
@@ -499,6 +516,22 @@ class Entity extends EventEmitter
         }
 
         ComponentsType.forEach(el => this.delete(el));
+        return this;
+    }
+
+    /**
+     * Delete specific components from this entity. If a component is not found,
+     * no error will be thrown and no component will be deleted.
+     *
+     * @param {Array.<AComponent>} ComponentsType Type of the components to delete
+     * @return {Entity} this entity (useful for chaining)
+     */
+    deleteManyIfExist(ComponentsType)
+    {
+        if (this.has(ComponentsType))
+        {
+            return this.deleteMany(ComponentsType);
+        }
         return this;
     }
 

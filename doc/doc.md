@@ -283,7 +283,9 @@ It may be useful if you have a drawing system:
         * [.add(ComponentType, ...args)](#Entity+add) ⇒ [<code>Entity</code>](#Entity)
         * [.addMany(ComponentsType)](#Entity+addMany) ⇒ [<code>Entity</code>](#Entity)
         * [.delete(ComponentType)](#Entity+delete) ⇒ [<code>Entity</code>](#Entity)
+        * [.deleteIfExist(ComponentType)](#Entity+deleteIfExist) ⇒ [<code>Entity</code>](#Entity)
         * [.deleteMany(ComponentsType)](#Entity+deleteMany) ⇒ [<code>Entity</code>](#Entity)
+        * [.deleteManyIfExist(ComponentsType)](#Entity+deleteManyIfExist) ⇒ [<code>Entity</code>](#Entity)
     * _static_
         * [.createWorld([ComponentsType])](#Entity.createWorld) ⇒ [<code>Entity</code>](#Entity)
 
@@ -491,11 +493,37 @@ found, an error will be thrown.
 | --- | --- | --- |
 | ComponentType | [<code>AComponent</code>](#AComponent) | Type of the component to delete |
 
+<a name="Entity+deleteIfExist"></a>
+
+### entity.deleteIfExist(ComponentType) ⇒ [<code>Entity</code>](#Entity)
+Delete a specific component from this entity. If the Component is not
+found, no error will be thrown.
+
+**Kind**: instance method of [<code>Entity</code>](#Entity)  
+**Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ComponentType | [<code>AComponent</code>](#AComponent) | Type of the component to delete |
+
 <a name="Entity+deleteMany"></a>
 
 ### entity.deleteMany(ComponentsType) ⇒ [<code>Entity</code>](#Entity)
 Delete specific components from this entity. If a component is not found,
 an error will be thrown.
+
+**Kind**: instance method of [<code>Entity</code>](#Entity)  
+**Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ComponentsType | [<code>Array.&lt;AComponent&gt;</code>](#AComponent) | Type of the components to delete |
+
+<a name="Entity+deleteManyIfExist"></a>
+
+### entity.deleteManyIfExist(ComponentsType) ⇒ [<code>Entity</code>](#Entity)
+Delete specific components from this entity. If a component is not found,
+no error will be thrown and no component will be deleted.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 **Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  

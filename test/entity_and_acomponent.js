@@ -557,6 +557,78 @@ describe('Integration between Entity and AComponent', function()
         });
     });
 
+    describe('Entity.deleteIfExist', function()
+    {
+        it('should delete the component', function()
+        {
+            const e = Entity.createWorld();
+            e.add(PositionComponent);
+            expect(e.has([PositionComponent])).to.be.true;
+            expect(e.position.x).to.equal(0);
+
+            e.deleteIfExist(PositionComponent);
+            expect(e.has([PositionComponent])).to.be.false;
+            expect(e.position).to.be.undefined;
+        });
+
+        it('should delete the component but others should still be available', function()
+        {
+            const e = Entity.createWorld();
+            e.addMany([PositionComponent, VelocityComponent]);
+            expect(e.has([PositionComponent])).to.be.true;
+            expect(e.position.x).to.equal(0);
+            expect(e.has([VelocityComponent])).to.be.true;
+            expect(e.velocity.velocity).equal(0);
+
+            e.deleteIfExist(PositionComponent);
+            expect(e.has([PositionComponent])).to.be.false;
+            expect(e.position).to.be.undefined;
+            expect(e.has([VelocityComponent])).to.be.true;
+            expect(e.velocity.velocity).equal(0);
+        });
+
+        it('should delete the component when given a super class', function()
+        {
+            const e = Entity.createWorld();
+            e.add(SpriteComponent);
+            expect(e.has([DrawableComponent])).to.be.true;
+            e.deleteIfExist(DrawableComponent);
+            expect(e.has([DrawableComponent])).to.be.false;
+        });
+
+        it('should return this', function()
+        {
+            const e = Entity.createWorld();
+            e.add(SpriteComponent);
+            expect(e.deleteIfExist(SpriteComponent)).to.equal(e);
+        });
+
+        it('should not throw if component is not available', function()
+        {
+            const e = Entity.createWorld();
+
+            e.deleteIfExist(PositionComponent);
+        });
+
+        it('should not throw on double-delete', function()
+        {
+            const e = Entity.createWorld();
+            e.add(PositionComponent);
+            e.deleteIfExist(PositionComponent);
+            e.deleteIfExist(PositionComponent);
+        });
+
+        it('should throw if pass AComponent as it is a global super class', function()
+        {
+            const e = Entity.createWorld();
+
+            expect(() =>
+            {
+                e.deleteIfExist(AComponent);
+            }).to.throw();
+        });
+    });
+
     describe('Entity.deleteMany', function()
     {
         it('should delete all components', function()
@@ -646,6 +718,94 @@ describe('Integration between Entity and AComponent', function()
             expect(() =>
             {
                 e.deleteMany([AComponent]);
+            }).to.throw();
+        });
+    });
+
+    describe('Entity.deleteManyIfExist', function()
+    {
+        it('should delete all components', function()
+        {
+            const e = Entity.createWorld();
+            e.addMany([PositionComponent, VelocityComponent]);
+            expect(e.has([PositionComponent])).to.be.true;
+            expect(e.position.x).to.equal(0);
+            expect(e.has([VelocityComponent])).to.be.true;
+            expect(e.velocity.velocity).equal(0);
+
+            e.deleteManyIfExist([PositionComponent, VelocityComponent]);
+            expect(e.has([PositionComponent])).to.be.false;
+            expect(e.has([VelocityComponent])).to.be.false;
+        });
+
+        it('should do nothing on passing empty-array', function()
+        {
+            const e = Entity.createWorld();
+            e.addMany([PositionComponent, VelocityComponent]);
+            expect(e.has([PositionComponent])).to.be.true;
+            expect(e.position.x).to.equal(0);
+            expect(e.has([VelocityComponent])).to.be.true;
+            expect(e.velocity.velocity).equal(0);
+
+            e.deleteManyIfExist([]);
+            expect(e.has([PositionComponent])).to.be.true;
+            expect(e.position.x).to.equal(0);
+            expect(e.has([VelocityComponent])).to.be.true;
+            expect(e.velocity.velocity).equal(0);
+        });
+
+        it('should not throw if at least one component is not available and delete nothing', function()
+        {
+            const e1 = Entity.createWorld();
+            e1.add(PositionComponent);
+            e1.deleteManyIfExist([PositionComponent, VelocityComponent]);
+            expect(e1.has([PositionComponent])).to.be.true;
+
+            const e2 = Entity.createWorld();
+            e2.deleteManyIfExist([PositionComponent, VelocityComponent]);
+        });
+
+        it('should delete the component when given a super class', function()
+        {
+            const e = Entity.createWorld();
+            e.add(SpriteComponent);
+            expect(e.has([DrawableComponent])).to.be.true;
+            e.deleteManyIfExist([DrawableComponent]);
+            expect(e.has([DrawableComponent])).to.be.false;
+        });
+
+        it('should return this', function()
+        {
+            const e = Entity.createWorld();
+            e.add(SpriteComponent);
+            expect(e.deleteManyIfExist([SpriteComponent])).to.equal(e);
+        });
+
+        it('should throw on passing non-array', function()
+        {
+            const e = Entity.createWorld();
+            expect(() =>
+            {
+                e.deleteManyIfExist(42);
+            }).to.throw();
+        });
+
+        it('should throw on passing non-components in array', function()
+        {
+            const e = Entity.createWorld();
+            expect(() =>
+            {
+                e.deleteManyIfExist([42]);
+            }).to.throw();
+        });
+
+        it('should throw if pass AComponent as it is a global super class', function()
+        {
+            const e = Entity.createWorld();
+
+            expect(() =>
+            {
+                e.deleteManyIfExist([AComponent]);
             }).to.throw();
         });
     });
