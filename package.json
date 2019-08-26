@@ -6,7 +6,11 @@
     "ecs",
     "unity",
     "entity",
-    "simple"
+    "simple",
+    "game",
+    "video",
+    "component",
+    "system"
   ],
   "main": "index.js",
   "scripts": {
