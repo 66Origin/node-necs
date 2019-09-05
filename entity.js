@@ -10,9 +10,9 @@ const { AComponentSymbol } = require('./internal/symbols');
 /**
  * An entity represent 'a thing' into your world.
  * 
- * By default, a component is empty: no behaviours, no meaning, no purpose.
+ * By default, an entity is empty: no behaviours, no meaning, no purpose.
  *
- * - You can create and attach components. As an example, you can create an entity named
+ * - You can attach components. As an example, you can create an entity named
  * `wall` which have the following components: `Position`, `Hitbox`, `Sprite`.
  * - You can create child entities.
  *

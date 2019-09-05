@@ -32,9 +32,9 @@ All entities that have all the required components will be in the given array.</
 </dd>
 <dt><a href="#Entity">Entity</a></dt>
 <dd><p>An entity represent &#39;a thing&#39; into your world.</p>
-<p>By default, a component is empty: no behaviours, no meaning, no purpose.</p>
+<p>By default, an entity is empty: no behaviours, no meaning, no purpose.</p>
 <ul>
-<li>You can create and attach components. As an example, you can create an entity named
+<li>You can attach components. As an example, you can create an entity named
 <code>wall</code> which have the following components: <code>Position</code>, <code>Hitbox</code>, <code>Sprite</code>.</li>
 <li>You can create child entities.</li>
 </ul>
@@ -236,9 +236,9 @@ to `update()`. It is an entity filter by components.
 ## Entity
 An entity represent 'a thing' into your world.
 
-By default, a component is empty: no behaviours, no meaning, no purpose.
+By default, an entity is empty: no behaviours, no meaning, no purpose.
 
-- You can create and attach components. As an example, you can create an entity named
+- You can attach components. As an example, you can create an entity named
 `wall` which have the following components: `Position`, `Hitbox`, `Sprite`.
 - You can create child entities.
 

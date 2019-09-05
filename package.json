@@ -19,7 +19,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/YellowInnovation/node-necs.git"
+    "url": "git://github.com/YellowInnovation/node-necs.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "author": "Martin Hammerchmidt <martin.hammerchmidt@gmail.com>",
   "license": "(MIT OR Apache-2.0)",

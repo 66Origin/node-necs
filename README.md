@@ -8,9 +8,9 @@ It take some principles from the `ECS` pattern but break some of its rules.
 
 - Entity, Components and Systems.
 - Components are not pure data, they can have 'code' and can replace systems in some cases.
-- On calling `update()` to an entity, all its childs and component will have `earlyUpdate()` and `lateUpdate()` called.
 - There is an entity tree: each entity can have child entities. That means there is one 'super entity' which own all
 entities from your world.
+- On calling `update()` to an entity, all its childs and component will have `earlyUpdate()` and `lateUpdate()` called.
 
 It is like the `GameObject` (entity) and `MonoBehaviour` (components) from Unity.
 
@@ -18,8 +18,7 @@ It is like the `GameObject` (entity) and `MonoBehaviour` (components) from Unity
 
 - Small and easy to read/edit.
 - It does only one small thing.
-- As it is not super-evolved, it may not fit your needs. It will not be efficient for medium to big datasets because
-many loops could be optimized at the price of complexity.
+- As it is not super-evolved, it may not fit your needs. It will not be efficient for big datasets.
 - Battle tested and production tested.
 - Fail-fast. Every function call is type and error checked and throw errors: no silent error that will blow somewhere sometime.
 - We use `lodash` but do require only the functions we need and we do not use chains. It drastically lower the memory footprint.
@@ -36,10 +35,10 @@ What you could easily implement:
 ```javascript
 const world = Entity.createWorld();
 world.add(SystemComponent); // This entity is now able to run systems
-world.systems.add(DrawSystem); // on each `update()`, the system will draw sprites on-screen
+world.systems.add(DrawSystem); // DrawSystem draw each sprites on-screen
 
-const wall = world.createChild('wall');
-wall.add(SpriteComponent, 'wall.png');
+const wall = world.createChild('wall'); // Create an entity in your world. It represent nothing yet
+wall.add(SpriteComponent, 'wall.png'); // Your entity will now be drawed on-screen using 'wall.png'
 wall.sprite.position.x = 10;
 wall.sprite.position.y = 10;
 
