@@ -402,6 +402,7 @@ class Entity extends EventEmitter
      * If you pass a super class of your component, it will return it.
      *
      * @param {AComponent=} ComponentType Type of your component or a subclass to get. `null` if not found.
+     * @return {?AComponent} Return the requested component instance or null.
      */
     get(ComponentType)
     {

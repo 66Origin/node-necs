@@ -279,7 +279,7 @@ It may be useful if you have a drawing system:
         * [.deleteChilds()](#Entity+deleteChilds)
         * [.deleteThis()](#Entity+deleteThis)
         * [.has(ComponentsType)](#Entity+has) ⇒ <code>Boolean</code>
-        * [.get([ComponentType])](#Entity+get)
+        * [.get([ComponentType])](#Entity+get) ⇒ [<code>AComponent</code>](#AComponent)
         * [.add(ComponentType, ...args)](#Entity+add) ⇒ [<code>Entity</code>](#Entity)
         * [.addMany(ComponentsType)](#Entity+addMany) ⇒ [<code>Entity</code>](#Entity)
         * [.delete(ComponentType)](#Entity+delete) ⇒ [<code>Entity</code>](#Entity)
@@ -442,12 +442,13 @@ You can by example have `ADrawableComponent` which is inherited by `SpriteCompon
 
 <a name="Entity+get"></a>
 
-### entity.get([ComponentType])
+### entity.get([ComponentType]) ⇒ [<code>AComponent</code>](#AComponent)
 Get a specific component from this entity.
 
 If you pass a super class of your component, it will return it.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
+**Returns**: [<code>AComponent</code>](#AComponent) - Return the requested component instance or null.  
 
 | Param | Type | Description |
 | --- | --- | --- |
