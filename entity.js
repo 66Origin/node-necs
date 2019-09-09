@@ -466,6 +466,9 @@ class Entity extends EventEmitter
     /**
      * Delete a specific component from this entity. If the Component is not
      * found, an error will be thrown.
+     *
+     * A common mistake is to delete components, but forget to delete its listeners. It may cause memory leaks and bugs
+     * if you insert back the component later.
      * 
      * @param {AComponent} ComponentType Type of the component to delete
      * @return {Entity} this entity (useful for chaining)
@@ -490,6 +493,9 @@ class Entity extends EventEmitter
      * Delete a specific component from this entity. If the Component is not
      * found, no error will be thrown.
      *
+     * A common mistake is to delete components, but forget to delete its listeners. It may cause memory leaks and bugs
+     * if you insert back the component later.
+     *
      * @param {AComponent} ComponentType Type of the component to delete
      * @return {Entity} this entity (useful for chaining)
      */
@@ -505,6 +511,9 @@ class Entity extends EventEmitter
     /**
      * Delete specific components from this entity. If a component is not found,
      * an error will be thrown.
+     *
+     * A common mistake is to delete components, but forget to delete its listeners. It may cause memory leaks and bugs
+     * if you insert back the component later.
      *
      * @param {Array.<AComponent>} ComponentsType Type of the components to delete
      * @return {Entity} this entity (useful for chaining)
@@ -523,6 +532,9 @@ class Entity extends EventEmitter
     /**
      * Delete specific components from this entity. If a component is not found,
      * no error will be thrown and no component will be deleted.
+     *
+     * A common mistake is to delete components, but forget to delete its listeners. It may cause memory leaks and bugs
+     * if you insert back the component later.
      *
      * @param {Array.<AComponent>} ComponentsType Type of the components to delete
      * @return {Entity} this entity (useful for chaining)

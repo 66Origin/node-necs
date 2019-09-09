@@ -487,6 +487,9 @@ Each component must be default-constructible.
 Delete a specific component from this entity. If the Component is not
 found, an error will be thrown.
 
+A common mistake is to delete components, but forget to delete its listeners. It may cause memory leaks and bugs
+if you insert back the component later.
+
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 **Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
 
@@ -499,6 +502,9 @@ found, an error will be thrown.
 ### entity.deleteIfExist(ComponentType) ⇒ [<code>Entity</code>](#Entity)
 Delete a specific component from this entity. If the Component is not
 found, no error will be thrown.
+
+A common mistake is to delete components, but forget to delete its listeners. It may cause memory leaks and bugs
+if you insert back the component later.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 **Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
@@ -513,6 +519,9 @@ found, no error will be thrown.
 Delete specific components from this entity. If a component is not found,
 an error will be thrown.
 
+A common mistake is to delete components, but forget to delete its listeners. It may cause memory leaks and bugs
+if you insert back the component later.
+
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 **Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
 
@@ -525,6 +534,9 @@ an error will be thrown.
 ### entity.deleteManyIfExist(ComponentsType) ⇒ [<code>Entity</code>](#Entity)
 Delete specific components from this entity. If a component is not found,
 no error will be thrown and no component will be deleted.
+
+A common mistake is to delete components, but forget to delete its listeners. It may cause memory leaks and bugs
+if you insert back the component later.
 
 **Kind**: instance method of [<code>Entity</code>](#Entity)  
 **Returns**: [<code>Entity</code>](#Entity) - this entity (useful for chaining)  
